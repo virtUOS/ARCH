@@ -1,0 +1,26 @@
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% trans "Activate Your Account" %}</title>
+</head>
+<body>
+    <h2>{% trans "Welcome" %} {{ user.username }}!</h2>
+    <br>
+    <p>{% trans "Recently an account was created for you." %}</p>
+    <p>{% trans "Use your username and password to log in:" %}</p>
+    <p>User: <b>{{ user.username }}</b></p>
+    <p>Password: <b>{{ password }}</b></p>
+    <p>{% trans "Please change this password immediately! " %}</p>
+    <br>
+    <p>{% trans "To activate your account, please click the following link: " %}</p>
+    <p><a href="{{ activation_link }}">{% trans "Activate Your Account" %}</a></p>
+    <br>
+    <p>{% trans "In case the activation link is not working, try to access the website via the normal login page." %}</p>
+    <p>{% trans "If the problem persists, contact a moderator or your administrator." %}</p>
+    <br>
+    <p>{% trans "Kind regards" %}</p>
+</body>
+</html>

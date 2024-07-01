@@ -1,0 +1,166 @@
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+
+
+{% block navbar %}
+
+    <nav class="navbar rounded my-2 mx-1"
+         id="arch-navbar">
+
+        {#ARCH brand#}
+        <div class="col-xs-auto col-sm-6 col-md-2 order-md-first">
+
+            <a class="" href="{% url 'arch_app:index' %}">
+
+                <h1 class="text-dark font-weight-bold">ARCH</h1>
+
+                {#                <h3>#}
+                {#                    <b class="text-primary"><i>Memory</i></b><b class="text-secondary">Net</b>#}
+                {#                </h3>#}
+
+                {#                <div class="logo">#}
+                {#                    <h1 class="text-primary">#}
+                {#                        DIVE#}
+                {#                    </h1>#}
+                {#                    <h1 class="text-dark">#}
+                {#                        DIVE#}
+                {#                    </h1>#}
+                {#                </div>#}
+
+                {#                <!-- logo for large screen -->#}
+                {#                <i class="d-none d-sm-inline-block">#}
+                {#                    <b>E<i class="fs-2 text-primary">X</i>OGR<i class="bi bi-triangle fs-3 text-secondary"></i>M</b></i>#}
+                {#                <!-- logo for small screen -->#}
+                {#                <i class="d-sm-none d-inline-block">#}
+                {#                    <b class="fs-2 pl-1 text-primary" style="position: absolute"><i>X</i></b>#}
+                {#                    <i class="bi bi-triangle fs-3 text-secondary"></i>#}
+                {#                </i>#}
+
+                {#                 include Logo #}
+                {#                 <i style="font-size: medium">#}
+                {#                     <img style="height: 80px;"#}
+                {#                          src="{% static 'arch_app/img/drawing.svg' %}"#}
+                {#                          alt="App Logo"#}
+                {#                          loading="lazy">#}
+                {#                 </i>#}
+
+            </a>
+        </div>
+
+        {#Contains navigation to archive, upload button and conf button#}
+        <div class="col-xs-auto col-sm-6 col-md-3 order-md-last">
+
+            <div class="row justify-content-end">
+
+                {# navigation to archives #}
+                <div class="col-auto p-1">
+                    {% if  user.is_authenticated %}
+                        {% get_archives_for_user user as archives %}
+                        {% if archives %}
+                            <div class="d-flex mx-1" style="height: 100%;">
+
+                                {% if archives|length < 2 %}
+                                    <a class="btn btn-dark d-flex my-auto"
+                                       href="{% url 'arch_app:archive' archives.0.name|slugify archives.0.id %}">
+                                        <i class="bi bi-house-door"></i> {{ archives.0.name }}
+                                    </a>
+
+                                {% else %}
+                                    <div class="dropdown my-auto">
+                                        <a class="btn btn-dark" id="archivesDropdown"
+                                           role="button" href="#"
+                                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bi bi-house-door"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="archivesDropdown">
+                                            {% for archive in archives %}
+                                                <a class="dropdown-item text-primary"
+                                                   href="{% url 'arch_app:archive' archive.name|slugify archive.id %}">
+                                                    {{ archive.name }}
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                {# upload button #}
+                <div class="col-auto p-1">
+                    {% include "../partials/upload_button.html" %}
+                </div>
+                {#Conf button#}
+                <div class="col-auto p-1">
+
+                    <div class="dropdown ">
+                        <div id="navbarDropdown" role="button"
+                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            {% if user.is_authenticated and user.profile_picture %}
+                                <img class="rounded-circle"
+                                     style="height: 3em; width: 3em; object-fit: cover; border: 1px white solid"
+                                     src="{{ user.profile_picture.url }}"
+                                     alt="User Profile"
+                                     loading="lazy">
+                            {% else %}
+                                <i class="bi bi-person-circle fs-1 text-dark"></i>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="dropdown-menu dropdown-menu-end"
+                             aria-labelledby="navbarDropdown"
+                             style="min-width: 14rem">
+
+                            {% if  user.is_authenticated %}
+                                <h4 class="dropdown-item text-primary">{{ user.username }}</h4>
+                                <hr class="dropdown-divider">
+                            {% endif %}
+
+                            <div class="dropdown-item">
+                                {% include "./language_button.html" %}
+                            </div>
+
+                            {% if user.is_authenticated %}
+
+                                <a class="dropdown-item text-primary" href="{% url 'arch_app:profile' %}">
+                                    {% trans "Settings" %}
+                                </a>
+                                {% if user.is_superuser %}
+                                    <a class="dropdown-item text-primary" href="/admin">{% trans "Administration" %}</a>
+                                    <a class="dropdown-item text-primary" href="{% url 'arch_app:dashboard' %}">
+                                        {% trans "Dashboard" %}
+                                    </a>
+                                {% endif %}
+                                <a class="dropdown-item text-primary" href="{% url 'logout' %}?next={{ request.path }}">
+                                    {% trans "Log out" %}
+                                </a>
+
+                            {% else %}
+                                <a class="dropdown-item text-primary" href="{% url 'login' %}?next={{ request.path }}">
+                                    {% trans "Login" %}
+                                </a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>  <!-- col -->
+
+        <div class="col-xs-auto col-sm-12 col-md-6 justify-content-center d-flex mx-sm-1 mx-md-1 mx-lg-0">
+            {% include "./searchbar.html" %}
+        </div>
+
+    </nav>  <!-- navbar -->
+
+    {% include "./search_filters.html" %}
+
+
+{% endblock %}

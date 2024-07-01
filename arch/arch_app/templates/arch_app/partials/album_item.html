@@ -1,0 +1,66 @@
+{% load arch_tags %}
+{% load i18n %}
+{% load static %}
+
+
+{#<div class="card border-dark mb-3">#}
+{#    <div class="card-header">#}
+{#        {{ album.title }}#}
+{#    </div>#}
+{#    <div class="card-body text-dark">#}
+{##}
+{#        <p class="card-text">#}
+{##}
+{#            {% if album.get_start_date %}#}
+{#                ({{ album.get_start_date }} {% if album.get_end_date %}- {{ album.get_end_date }} {% endif %})#}
+{#            {% endif %}#}
+{##}
+{#        </p>#}
+{##}
+{##}
+{#                <a href="{% url 'arch_app:album' album.id %}">#}
+{#                    <i class="bi bi-folder" style="font-size: 5rem;"></i>#}
+{#                </a>#}
+{##}
+{#    </div>#}
+
+
+<div class="p-2 m-2" style="border: 2px solid lightgray; border-radius: 10px;">
+
+    <div class="row m-0 px-1 justify-content-center">
+        <div class="col text-center">
+            <h6 class="text-truncate ">
+                {{ album.title }}
+            </h6>
+        </div>
+    </div>
+
+    <div class="row m-0 p-0 justify-content-end">
+        <div class="col p-0">
+            <div class="text-muted text-truncate text-center" style="font-size: xx-small">
+                {% with start_date=album.get_start_date %}
+                    {% with end_date=album.get_end_date %}
+                        {% if start_date %}
+                            <div class="col-auto" title="{% trans 'Time span covered by this Album' %}">
+                                ( {{ start_date }}
+                                {% if end_date and start_date != end_date %}
+                                    - {{ end_date }}
+                                {% endif %}
+                                )
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row p-1 justify-content-center">
+        <div class="col text-center">
+            <a href="{% url 'arch_app:album' album.id %}">
+                <i class="bi bi-folder" style="font-size: 5rem;"></i>
+            </a>
+        </div>
+    </div>
+
+</div>

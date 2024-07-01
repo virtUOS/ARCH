@@ -1,0 +1,11 @@
+<form method="POST"
+       action="{% url 'arch_app:update_album' album.id %}?type_of_form=update_album_members_form"
+      enctype="multipart/form-data"
+id="update-album-members-form">
+    {% csrf_token %}
+
+    {{ album_members_form.users }}
+
+
+</form>
+

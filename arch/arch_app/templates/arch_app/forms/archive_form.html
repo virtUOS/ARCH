@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load guardian_tags %}
+{% load static %}
+
+{% get_obj_perms user for archive as "archive_perms" %}
+
+<div class="tab-pane fade active show py-3">
+
+    <form method="POST"
+          action="{% url 'arch_app:archive' archive.name archive.id %}"
+          enctype="multipart/form-data"
+          id="archive-form-id">
+        {% csrf_token %}
+
+        {{ archive_form.profile_picture.errors }}
+        <a href="#"
+                {% if "is_moderator" in archive_perms %}
+           title='{% trans "click to change profile picture" %}'
+           onclick="getElementById('profile-picture-input').click(); 
+                    getElementById('profile-picture-div').style.visibility = 'visible';"
+                {% endif %} >
+            <div class="text-center">
+                {% if archive.profile_picture %}
+                    <img class="img-fluid text-center"
+                         style="max-height: 45vh; object-fit: cover;"
+                         src="{{ archive.profile_picture.url }}"
+                         alt="{% trans "Group picture" %}"
+                         loading="lazy">
+                {% else %}
+                    <i class="bi bi-people text-warning-emphasis" style="font-size: 20vh; color: lightblue;"></i>
+                {% endif %}
+            </div>
+        </a>
+
+        {% if "is_moderator" in archive_perms %}
+            <div class="center py-2 d-flex" style="visibility: hidden;" id="profile-picture-div">
+                {{ archive_form.profile_picture }}
+                <button type="submit" 
+                        class="btn btn-sm btn-outline-primary mx-1" 
+                        style="float: right;"
+                        title="Save changes">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% endif %}
+
+        {% if "is_moderator" in archive_perms %}
+            {{ archive_form.description.errors }}
+            {{ archive_form.description }}
+        {% else %}
+            {{ archive.description | linebreaksbr }}
+        {% endif %}
+
+    </form>
+
+</div>

@@ -1,0 +1,12 @@
+{% load i18n %}
+
+
+<form action="{% url 'arch_app:add_member' %}"
+      method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{  form.as_p  }}
+    <input type="hidden" name="archive" value="{{ archive.id }}">
+
+    <button type="submit" value="Submit" class="btn btn-primary">{% trans "Submit" %}</button>
+
+</form>

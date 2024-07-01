@@ -1,0 +1,10 @@
+[Unit]
+Description=ARCH Task Queue
+Documentation=https://example.com
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=python manage.py qcluster --settings=arch.settings
+WorkingDirectory=/opt/ARCH/arch/
+Restart=always

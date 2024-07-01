@@ -1,0 +1,55 @@
+{% extends "./base.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}
+    {% if album.title %}
+        {{ album.title }}
+    {% else %}
+        {% trans "Search" %}
+    {% endif %}
+{% endblock %}
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "./partials/sidebar.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+{#    almode_mode passed through context, True when user is on Album page#}
+    <div id="album_mode_parameter" data-mode="{{ album_mode }}" ></div>
+     {% include "./partials/spinner.html" %}
+
+    {% if record_list %}
+
+
+        {% include "./partials/gallery.html" %}
+
+        <div class="row">
+            <div class="col-md-10 mx-auto py-2">
+                {% include "./partials/pagination.html" %}
+            </div>
+        </div>
+
+    {% else %}
+        <div class="row mb-3 py-2 justify-content-center">
+            <div class="col-md-8 text-center">
+                <p class="lead">{% trans "I am sorry, we could not find any results for your query." %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+{#    <script src="{% static 'arch_app/js/album_mode.js' %}"></script>#}
+{#    <script src="{% static 'arch_app/js/drag_drop.js' %}"></script>#}
+{#    <script src="{% static 'arch_app/js/preserve_toggle_state.js' %}"></script>#}
+{#    <script src="{% static 'arch_app/js/utils.js' %}"></script>#}
+{% endblock %}

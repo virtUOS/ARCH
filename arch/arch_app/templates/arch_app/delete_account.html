@@ -1,0 +1,36 @@
+{% extends "./base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load arch_tags %}
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+
+        <div class="col-8 justify-content-center">
+            {% if account %}
+
+                <h1>{% trans "Delete Account" %} {{ account.username }}</h1>
+                <div>{% trans "Do you really want to delete the account?" %}</div>
+                <div>{% trans "This action cannot be undone and all related data will be permanently removed." %}</div>
+                <br>
+                <form method="post" action="{% url 'arch_app:delete_account' uidb64 token %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-warning">{% trans "Yes, delete the account" %}</button>
+                </form>
+
+            {% else %}
+                <div>{% trans "No account found to be deleted." %}</div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+{% endblock %}
+

@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load arch_tags %}
+
+<form method="post" action="{% url 'arch_app:feedback' %}">
+    {% csrf_token %}
+
+    <div class="form-group row justify-content-center">
+
+
+        {% get_contact_email as contact_mail %}
+
+
+        <div class="col-sm-10">
+            {{ feed_back_form.message }}
+            <small class="form-text text-muted justify-content-center">
+                {% if contact_mail %}
+                    {% trans "Your message is sent anonymously to the Administrator " %}
+                    ({{ contact_mail }})
+
+                {% else %}
+                    {% trans "Please contact the Administrator to configure a contact email" %}
+
+                {% endif %}
+            </small>
+
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>

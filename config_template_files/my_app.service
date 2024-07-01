@@ -1,0 +1,10 @@
+[Unit]
+Description=my_app Service Test
+Documentation=https://example.com
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/env/bin/gunicorn my_app.wsgi:application --workers=2 --threads=1 --bind 127.0.0.1:8000
+WorkingDirectory=/opt/my_app
+Restart=always

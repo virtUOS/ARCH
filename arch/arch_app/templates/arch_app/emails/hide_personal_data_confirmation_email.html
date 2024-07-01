@@ -1,0 +1,22 @@
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% trans "Hiding Account" %}</title>
+</head>
+<body>
+<h3>{% trans 'Dear' %} {{ user.username }}</h3>
+<p>{% trans 'You personal data has been hidden from ' %}{{ hostname }} .</p>
+<p>{% trans 'This includes all comments, photos and information shown to other members.' %}</p>
+<p>{% trans 'We pixelated all photos related to you.' %}</p>
+<p>{% trans 'If you change your mind and want to visit the archive again, you can just log in with your account and all data will be restored.' %}</p>
+<br>
+<p>{% trans 'If you want to permanently delete your account and all your personal data, follow the link below.' %}</p>
+<p><a href="{{ delete_account_link }}">{% trans 'Delete Account' %}</a></p>
+<p>{% trans 'Warning, this cannot be undone!' %}</p>
+
+<p>{% trans "Best regards" %}</p>
+</body>
+</html>

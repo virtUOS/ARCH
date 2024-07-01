@@ -1,0 +1,209 @@
+{% load arch_tags %}
+{% load i18n %}
+{% load static %}
+{% load guardian_tags %}
+
+
+<div class="p-2 rounded border">
+    {% get_obj_perms user for record.album.archive as "archive_perms" %}
+    <!-- row 1 -->
+    <div class="row m-0 px-1 justify-content-start">
+        {#    colum 1 date created and record's title#}
+        <div class="col">
+            {% if record.date_created %}
+                <div class="text-muted text-truncate align-middle" style="font-size: xx-small">
+                    {{ record.date_created }}
+                </div>
+            {% endif %}
+            {% if record.title %}
+                <h6 class="text-truncate ">
+                    {{ record.title }}
+                </h6>
+            {% else %}
+                <br>
+            {% endif %}
+        </div>
+    </div>
+
+    {#row 2. Contains record file#}
+    <div class="row">
+        <div class="col">
+
+            {% if album_mode == 'False' %}
+                {% generate_query_string query start_date end_date location media_type album_mode as query_params %}
+                <a href="{% url 'arch_app:record' record.id %}{{ query_params }}" draggable="false">
+            {% else %}
+                <a href="{% url 'arch_app:record' record.id %}?album_mode={{ album_mode }}" draggable="false">
+            {% endif %}
+
+
+
+            <div class="record-container" draggable="true" data-record_id="{{ record.id }}">
+
+                {% if record.type == 'Image' %}
+                    {#  Image  #}
+                    {% if record.get_file_extension == 'heic' %}
+                        <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+                            <i class="bi bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+                        </div>
+
+                    {% else %}
+                        <img class="img-fluid rounded"
+                             style="width: 100%; max-height: 35vh; object-fit: cover;"
+                             draggable="false"
+                             src="{{ record.get_preview_url }}"
+                             alt="{{ record.title }}"
+                             loading="lazy">
+                    {% endif %}
+                {% elif record.type == 'Video' %}
+                    {#  Video  #}
+                    <video class="rounded" preload="metadata"
+                           style="width: 100%; max-height: 20vh; object-fit: cover">
+                        <source src="{{ record.get_preview_url }}#t=1" type="video/mp4">
+                        <source src="{{ record.get_preview_url }}#t=1" type="video/ogg">
+                        Your browser does not support the video tag.
+                    </video>
+
+                    {#                    <div class="play-icon">#}
+                    {#                        <i class="bi bi-play rounded"></i>#}
+                    {#                    </div>#}
+
+                {% elif record.type == 'Audio' %}
+                    {#  Audio  #}
+                    <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+                        <i class="bi bi-file-music bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+                    </div>
+
+                {% elif record.type == 'Text' %}
+                    <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+                        {# bi-file-text is the default icon if the icon showing the filetype does not exit #}
+                        <i class="bi bi-file-text bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+                    </div>
+
+                {% else %}
+                    {# 'Other' #}
+                    <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+                        {# bi-file-earmark is the default icon if the icon showing the filetype does not exit #}
+                        <i class="bi bi-file-earmark bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+                    </div>
+
+                {% endif %}
+
+            </div>
+            </a>
+
+        </div>
+    </div>
+
+    {#row 3 Contains number of comments, delete record and move to different album option#}
+
+    {% get_number_comments record.id as num_comments %}
+
+
+    <div class="d-flex flex-row-reverse pt-md-1">
+        {#    move to the right of container#}
+
+        <div title="Number of comments">
+
+            <a
+                    href="{% url 'arch_app:record' record.id %}{{ query_params }}"
+                    onclick="showComments()"
+            >
+
+                   <span class="position-relative">
+                    <i class="bi bi-chat-fill"></i>
+                       {% if  num_comments %}
+
+
+                           <span class="badge badge-pill badge-info position-absolute top-0 start-100 translate-middle">
+                        {{ num_comments }}
+                    </span>
+
+
+
+                       {% endif %}
+            </span>
+
+
+            </a>
+
+        </div>
+
+
+        {% if "is_moderator" in archive_perms %}
+            {#        Delete button#}
+
+            <div class="mx-3" title="{% trans 'Delete this record' %}">
+
+
+                <!-- Button trigger modal -->
+                <div type="button" class="" data-bs-toggle="modal" data-bs-target="#modal-delete-{{ record.id }}">
+                    <i class="bi bi-trash text-warning"></i>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-delete-{{ record.id }}" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">{% trans 'Delete Record' %}</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {% trans ' Are you sure you want to delete this record?' %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">{% trans 'Cancel' %}</button>
+                                <a class="btn btn-warning" role="button"
+                                   href="{% url 'arch_app:delete_record' record.id %}?album_mode={{ album_mode }}">
+
+                                    {% trans "Delete" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="">
+
+                {# change album #}
+
+                <div class="" type="button" id="dropdownMenu-{{ record.id }}"
+                     data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-folder-symlink text-primary"></i>
+                </div>
+                <div class="dropdown-menu"
+                     aria-labelledby="dropdownMenu-{{ record.id }}">
+
+                    <div class="dropdown-item d-flex text-primary">
+                        {% get_select_album_form record user as select_album_form %}
+                        {% include "../../forms/select_album_form.html" %}
+                    </div>
+                </div> <!-- dropdown-menu -->
+
+
+            </div>
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+<script>
+
+    function showComments() {
+        // When the user clicks on the num of comments, record
+        // is opened and comments are shown
+        localStorage.setItem('record-tab', 'comments');
+    }
+
+</script>

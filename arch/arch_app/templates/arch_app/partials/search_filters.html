@@ -1,0 +1,67 @@
+{% load i18n %}
+
+
+<div class="row pb-4">
+
+
+    <div class="d-flex justify-content-center">
+
+
+        {% if location %}
+
+            <div class="mx-2">
+                <button class="btn btn-primary btn-sm" onclick="window.arch.clean_filter('location')">
+                    {{ location }}
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+        {% endif %}
+
+        {% if depicted_users %}
+
+            <div class="mx-2">
+                <button class="btn btn-primary btn-sm" onclick="window.arch.clean_filter('depicted_users')">
+                    {{ depicted_users }}
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+
+        {% endif %}
+
+
+
+        {% if start_date or  end_date %}
+            {% if start_date != 'None' or  end_date != 'None' %}
+
+
+                <div class="mx-2">
+                    <button class="btn btn-primary btn-sm" onclick="window.arch.clean_filter('date')">
+                        {% trans "Date" %}
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+
+
+            {% endif %}
+        {% endif %}
+
+        {% if media_type %}
+
+            {% if  media_type != 'All' %}
+
+                <div class="mx-2">
+                    <button class="btn btn-primary btn-sm" onclick="window.arch.clean_filter('media_type')">
+                        {{ media_type }}
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+</div>

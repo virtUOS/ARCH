@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+
+{% if record.type == 'Image' %}
+    {#  Image  #}
+    <div class="container m-auto justify-content-center p-0"
+         id="container-canvas"
+         style="width: fit-content">
+        <div class="m-0 p-0" style="position: relative; width: fit-content">
+
+            <img class="img-fluid p-0 m-0" id="gallery-image-{{ record.id }}"
+                    {# image source with random query to prevent caching #}
+                 src="{{ record.get_preview_url }}?v={% get_random_int %}"
+                 alt="{{ record.title }}"
+                 loading="lazy">
+            <canvas id="imageCanvas" data-record="{{ record.id }}"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+            </canvas>
+
+            {% for tagbox in record.get_tagboxes.all %}
+                {# import tagbox template #}
+                {% include 'arch_app/partials/tagbox.html' %}
+            {% endfor %}
+
+        </div>  <!-- end of image container -->
+    </div> <!-- end of image container -->
+
+{% elif record.type == 'Video' %}
+    {#  Video  #}
+    <video controls style="max-width: 100%;">
+        <source src="{{ record.get_preview_url }}" type="video/mp4">
+        <source src="{{ record.get_preview_url }}" type="video/webm">
+        <source src="{{ record.get_preview_url }}" type="video/ogg">
+        Your browser does not support the video tag.
+    </video>
+
+{% elif record.type == 'Audio' %}
+    {#  Audio  #}
+    <audio controls style="max-width: 100%;">
+        <source src="{{ record.get_preview_url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+{% elif record.type == 'Text' %}
+    {#  Text  #}
+    {#        <img class="gallery-image " style="min-width: 80%;" id="gallery-image-{{ record.id }}"#}
+    {#             src="{{ record.get_preview_url }}"#}
+    {#             alt="{{ record.title }}"#}
+    {#             loading="lazy">#}
+    <a href="{{ record.media_file.url }}">
+        <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+            {# bi-file-text is the default icon if the icon showing the filetype does not exit #}
+            <i class="bi bi-file-text bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+        </div>
+    </a>
+
+{% else %}
+    {# 'Other' #}
+    <a href="{{ record.media_file.url }}">
+        <div class="text-center py-4" style="width: 100%;" title="{{ record.title }}">
+            {# bi-file-earmark is the default icon if the icon showing the filetype does not exit #}
+            <i class="bi bi-file-earmark bi-filetype-{{ record.get_file_extension }} fs-1"></i>
+        </div>
+    </a>
+
+{% endif %}
+
+{% block js %}
+{#<script src="{% static 'arch_app/js/draw_tag_box.js' %}"></script>#}
+<script>
+    window.arch.drawTagBox();
+</script>
+{% endblock %}
+

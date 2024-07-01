@@ -1,0 +1,181 @@
+{% extends "./base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+
+{% block title %}
+    {{ record.title }}
+{% endblock %}
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+
+
+{% block content %}
+    {% include "./partials/spinner.html" %}
+    <div class="container-fluid">
+
+        <div class="row pt-4">
+            <div class="col">
+                <div class="d-flex justify-content-end">
+
+                    {% if prev_record %}
+                        <a class="nav-link" id="previous-record-file" title="Previous"
+                           href="{% url 'arch_app:record' prev_record.pk %}"
+                           onclick="window.arch.addQueryParamsToLink(this.id)">
+                            <i class="bi bi-arrow-left fs-3 text-primary"></i>
+                        </a>
+                    {% else %}
+                        <a class="nav-link color-link-record-view" id="" title="no previous entry"
+                           href="#">
+                            <i class="bi bi-arrow-left fs-3 text-secondary"></i>
+                        </a>
+                    {% endif %}
+
+                    {% get_obj_perms user for record.album.archive as "archive_perms" %}
+                    {% get_obj_perms user for record as "record_perms" %}
+                    {% if "is_moderator" in archive_perms or "delete_record" in record_perms %}
+                        {# tool bar which expands on click #}
+                        <div class="rounded record-toolbar collapse" id="record-toolbar">
+
+                            <div class="d-flex">
+                                <a class="nav-link" title="{% trans "Delete" %}"
+                                   href="{% url 'arch_app:delete_record' record.pk %}?album_mode={{ album_mode }}">
+                                    <i class="bi bi-trash fs-3 text-danger"></i>
+                                </a>
+
+                                {#                            <a class="nav-link" title="{% trans "Download" %}"#}
+                                {#                               href="{{ record.media_file.url }}">#}
+                                {#                                <i class="bi bi-cloud-arrow-down fs-3"></i>#}
+                                {#                            </a>#}
+                                {#                            <div class="dropdown">#}
+                                {#                                <a class="toggle btn" title="{% trans "Tag Person" %}"#}
+                                {#                                   href="#" id="CreateTagDropdown" role="button"#}
+                                {#                                   data-bs-toggle="dropdown" aria-expanded="false">#}
+                                {#                                    <i class="bi bi-person-plus"></i>#}
+                                {#                                </a>#}
+                                {#                                <div class="dropdown-menu dropdown-menu-right"#}
+                                {#                                     id="tag-dropdown-menu-{{ tagbox.id }}"#}
+                                {#                                     aria-labelledby="CreateTagDropdown"#}
+                                {#                                     style="width: fit-content; border: solid 1px lightgray;">#}
+                                {#                                    <div class="container p-1">#}
+                                {#                                        {% get_tag_form users=archive.get_active_members.all as tag_form %}#}
+                                {#                                        {% include "./forms/create_tag_form.html" %}#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                                {#                            </div> <!-- end dropdown -->#}
+                            </div> <!-- end d-flex -->
+                        </div> <!-- end record-toolbar -->
+                        <button class="btn" type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#record-toolbar" aria-expanded="false"
+                                aria-controls="record-toolbar">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                    {% endif %}
+
+                    <div class="toggle-detail-comment d-flex" data-album="{{ record.album.is_inbox }}">
+                        <a id="btn-detail-record" class="nav-link text-secondary" href="#">
+                            <i class="bi bi-info-circle-fill fs-3 "></i>
+                        </a>
+                        <a id="btn-detail-comments" class="nav-link" href="#">
+                            <i class="bi bi-chat-left-text-fill fs-3"></i>
+                        </a>
+                    </div>
+
+                    {% if next_record %}
+                        <a class="nav-link" id="next-record-file" title="Next"
+                           href="{% url 'arch_app:record' next_record.pk %}"
+                           onclick="window.arch.addQueryParamsToLink(this.id)">
+                            <i class="bi bi-arrow-right fs-3 text-primary"></i>
+                        </a>
+                    {% else %}
+                        <a class="nav-link color-link-record-view text-secondary" title="no next record"
+                           href="#">
+                            <i class="bi bi-arrow-right fs-3"></i>
+                        </a>
+                    {% endif %}
+
+                    <!-- Exit button with X icon -->
+                    {#  check if user should return to search or album view  #}
+
+                    <a class="nav-link" title="Close" id="close-record"
+                            {% if album_mode == "True" %}
+                       href="{% url 'arch_app:album' album.id %}?page={{ current_page }}"
+                            {% else %}
+                       href="{% url 'arch_app:search' %}?archive_id={{ archive.id }}&page={{ current_page }}"
+                            {% endif %}
+                       onclick="window.arch.addQueryParamsToLink(this.id)">
+                        <i class="bi bi-x-lg fs-3 text-dark"></i>
+                    </a>
+
+                </div> <!-- end d-flex -->
+            </div>  <!-- end col -->
+        </div>  <!-- end row -->
+
+
+        <div class="row">
+            {#  contains record and description  #}
+
+            {#  display record  #}
+            <div class="col-md-8 mx-auto py-2 px-2 text-center">
+                <div class="row">
+                    <div class="col justify-content-center">
+                        {% include "./partials/record/record_detail.html" %}
+                    </div>
+                </div>
+            </div>  <!-- end col-md-8 -->
+
+            {# record metadata  #}
+            <div class="col-md-4 parent-record-metadata py-2">
+                <div class="row">
+                    <div class="col-md-12">
+                        {#  Record details  #}
+                        <div class="d-none" id="detail-record-container">
+                            {% include "./forms/record_form.html" %}
+                        </div>
+
+                        {#  Comments  #}
+                        <div class="d-none" id="detail-comments-container">
+                            <div class="row">
+                                <div class="col-12 scrollable-div" style="min-height: 0; max-height: 20rem;">
+                                    {% for comment in record.comments.all %}
+                                        <div class="row justify-content-center">
+                                            <div class="col-12">
+                                                {% include "./partials/comment.html" %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            {#  New comment  #}
+                            <div class="row comment-form justify-content-center">
+                                <div class="col-12 pt-4">
+                                    {% include "./forms/comment_form.html" %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+{#    <script src="{% static 'arch_app/js/record.js' %}"></script>#}
+    <script>
+        window.arch.initRecord();
+    </script>
+{#    <script src="{% static 'arch_app/js/remove_tag.js' %}"></script>#}
+{#    <script src="{% static 'arch_app/js/utils.js' %}"></script>#}
+{% endblock %}

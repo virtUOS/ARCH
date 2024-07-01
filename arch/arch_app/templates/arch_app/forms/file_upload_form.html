@@ -1,0 +1,25 @@
+{% extends "../base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+
+{% block navbar %}
+    {% include "../partials/navbar.html" %}
+{% endblock %}
+
+
+{% block sidebar %}
+    {% include "../partials/sidebar.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <button type="submit" class="btn btn-secondary" style="float: right">{% trans "Save" %}</button>
+    </form>
+
+{% endblock %}

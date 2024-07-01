@@ -1,0 +1,1277 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-13 12:50+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: germanMIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: arch/settings.py:214
+msgid "German"
+msgstr "Deutsch"
+
+#: arch/settings.py:215
+msgid "English"
+msgstr "Englisch"
+
+#: arch_app/forms.py:27
+msgid "Your message"
+msgstr "Deine Nachricht"
+
+#: arch_app/forms.py:38
+msgid "here you can describe the group."
+msgstr "Füge eine Beschreibung der Gruppe hinzu."
+
+#: arch_app/forms.py:67 arch_app/forms.py:157
+msgid "Start date cannot be later than end date."
+msgstr "Das Startdatum kann nicht später als das Enddatum sein."
+
+#: arch_app/forms.py:73 arch_app/models.py:209
+msgid "member"
+msgstr "Mitglied"
+
+#: arch_app/forms.py:74 arch_app/models.py:208
+msgid "moderator"
+msgstr "Moderator*in"
+
+#: arch_app/forms.py:90 arch_app/templates/arch_app/partials/searchbar.html:28
+#: arch_app/templates/arch_app/partials/searchbar.html:122
+#: arch_app/templates/arch_app/search.html:10
+msgid "Search"
+msgstr "Suche"
+
+#: arch_app/forms.py:102
+msgid "depicted_users"
+msgstr "abgebildete Personen"
+
+#: arch_app/forms.py:161
+msgid "Please enter a search query or select a filter."
+msgstr "Bitte gib eine Suchanfrage ein oder wähle einen Filter aus."
+
+#: arch_app/forms.py:192
+msgid "Add a comment..."
+msgstr "Schreibe einen Kommentar..."
+
+#: arch_app/forms.py:207
+msgid "... add a description"
+msgstr "... Beschreibung hinzufügen"
+
+#: arch_app/forms.py:211 arch_app/forms.py:334 arch_app/forms.py:375
+msgid "... add title"
+msgstr "... Titel hinzufügen"
+
+#: arch_app/forms.py:221
+msgid "... add a name of the street, city or place"
+msgstr "... Name der Straße, der Stadt oder des Ortes hinzufügen"
+
+#: arch_app/forms.py:223
+msgid "... add a state or region"
+msgstr "... Staat oder Region hinzufügen"
+
+#: arch_app/forms.py:225
+msgid "... add a country"
+msgstr "... Land hinzufügen"
+
+#: arch_app/forms.py:305
+msgid "... add username"
+msgstr "... Username hinzufügen"
+
+#: arch_app/forms.py:308
+msgid "... add last name"
+msgstr "... Nachname hinzufügen"
+
+#: arch_app/forms.py:311
+msgid "... add first name"
+msgstr "... Vorname hinzufügen"
+
+#: arch_app/forms.py:318
+msgid "Add a description of yourself."
+msgstr "Füge eine Beschreibung von Dir hinzu."
+
+#: arch_app/forms.py:320
+msgid "... add location"
+msgstr "... Ort hinzufügen"
+
+#: arch_app/forms.py:338
+msgid "Add a description of this album."
+msgstr "Füge eine Beschreibung hinzu."
+
+#: arch_app/models.py:212
+msgid "begin"
+msgstr "Start"
+
+#: arch_app/models.py:213
+msgid "end"
+msgstr "Ende"
+
+#: arch_app/templates/arch_app/account_settings.html:25
+msgid "Account Settings"
+msgstr "Account Einstellungen"
+
+#: arch_app/templates/arch_app/account_settings.html:33
+msgid "Profile"
+msgstr "Profil"
+
+#: arch_app/templates/arch_app/account_settings.html:35
+#: arch_app/templates/arch_app/forms/change_password.html:14
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: arch_app/templates/arch_app/account_settings.html:37
+msgid "Privacy"
+msgstr "Privacy"
+
+#: arch_app/templates/arch_app/album.html:60
+msgid "Manage access"
+msgstr "Zugriff konfigurieren"
+
+#: arch_app/templates/arch_app/album.html:63
+msgid "Manage Access"
+msgstr "Zugriff Konfigurieren"
+
+#: arch_app/templates/arch_app/album.html:67
+msgid "Delete album"
+msgstr "Album löschen"
+
+#: arch_app/templates/arch_app/album.html:70
+#: arch_app/templates/arch_app/forms/profile_form.html:68
+#: arch_app/templates/arch_app/partials/record/record_item.html:149
+#: arch_app/templates/arch_app/record.html:47
+msgid "Delete"
+msgstr "Löschen"
+
+#: arch_app/templates/arch_app/album.html:88
+msgid "People who can see this album."
+msgstr "Personen, die dieses Album sehen können."
+
+#: arch_app/templates/arch_app/album.html:89
+msgid "People"
+msgstr "Personen"
+
+#: arch_app/templates/arch_app/album.html:111
+#: arch_app/templates/arch_app/archive.html:79
+#: arch_app/templates/arch_app/partials/sidebar.html:70
+msgid "Inbox"
+msgstr "Posteingang"
+
+#: arch_app/templates/arch_app/album.html:133
+msgid "This album is empty."
+msgstr "Dieses Album is leer."
+
+#: arch_app/templates/arch_app/album.html:145
+msgid "Manage Album Access"
+msgstr "Zugriff Konfigurieren"
+
+#: arch_app/templates/arch_app/album.html:155
+msgid "Close"
+msgstr "Schließen"
+
+#: arch_app/templates/arch_app/album.html:158
+#: arch_app/templates/arch_app/forms/create_add_member_form.html:10
+#: arch_app/templates/arch_app/forms/record_form.html:130
+#: arch_app/templates/arch_app/members.html:177
+msgid "Submit"
+msgstr "Abschicken"
+
+#: arch_app/templates/arch_app/archive.html:51
+msgid "Home"
+msgstr "Home"
+
+#: arch_app/templates/arch_app/archive.html:59
+#: arch_app/templates/arch_app/members.html:15
+#: arch_app/templates/arch_app/members.html:25
+msgid "Members"
+msgstr "Mitglieder"
+
+#: arch_app/templates/arch_app/archive.html:69
+#: arch_app/templates/arch_app/dashboard.html:44
+#: arch_app/templates/arch_app/partials/album_list.html:13
+msgid "Albums"
+msgstr "Alben"
+
+#: arch_app/templates/arch_app/dashboard.html:10
+#: arch_app/templates/arch_app/partials/navbar.html:136
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: arch_app/templates/arch_app/dashboard.html:20
+msgid "Archive Metrics"
+msgstr "Archiv Metriken"
+
+#: arch_app/templates/arch_app/dashboard.html:33
+msgid "Records"
+msgstr "Einträge"
+
+#: arch_app/templates/arch_app/dashboard.html:55
+msgid "Users"
+msgstr "Nutzer"
+
+#: arch_app/templates/arch_app/dashboard.html:66
+msgid "Archives"
+msgstr "Archive"
+
+#: arch_app/templates/arch_app/dashboard.html:80
+msgid "The number of times users logged into the archive."
+msgstr "Anzahl der Logins der Nutzer."
+
+#: arch_app/templates/arch_app/dashboard.html:82
+msgid "Visits"
+msgstr "Besuche"
+
+#: arch_app/templates/arch_app/dashboard.html:97
+msgid "The number of comments on records."
+msgstr "Anzahl der Kommentare zu Einträgen."
+
+#: arch_app/templates/arch_app/dashboard.html:99
+msgid "Comments"
+msgstr "Kommentare"
+
+#: arch_app/templates/arch_app/dashboard.html:114
+msgid "The number of tagged persons on all records."
+msgstr "Die Anzahl der markierten Personen auf allen Einträgen."
+
+#: arch_app/templates/arch_app/dashboard.html:116
+msgid "Tags"
+msgstr "Markierungen"
+
+#: arch_app/templates/arch_app/dashboard.html:132
+msgid "The number of views over all records."
+msgstr "Anzahl der Aufrufe aller Einträge."
+
+#: arch_app/templates/arch_app/dashboard.html:134
+msgid "Views"
+msgstr "Views"
+
+#: arch_app/templates/arch_app/delete_account.html:18
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:17
+msgid "Delete Account"
+msgstr "Account löschen"
+
+#: arch_app/templates/arch_app/delete_account.html:19
+msgid "Do you really want to delete the account?"
+msgstr "Willst Du den Account wirklich löschen?"
+
+#: arch_app/templates/arch_app/delete_account.html:20
+msgid ""
+"This action cannot be undone and all related data will be permanently "
+"removed."
+msgstr ""
+"Diese Aktion kann nicht rückgängig gemacht werden und alle zugehörigen Daten "
+"werden dauerhaft gelöscht."
+
+#: arch_app/templates/arch_app/delete_account.html:25
+msgid "Yes, delete the account"
+msgstr "Ja, Account löschen"
+
+#: arch_app/templates/arch_app/delete_account.html:29
+msgid "No account found to be deleted."
+msgstr "Kein Account zum löschen gefunden."
+
+#: arch_app/templates/arch_app/emails/delete_account_confirmation_email.html:7
+msgid "Account deleted"
+msgstr "Account gelöscht"
+
+#: arch_app/templates/arch_app/emails/delete_account_confirmation_email.html:10
+msgid "Your account has been deleted successfully."
+msgstr "Dein Account wurde erfolgreich gelöscht."
+
+#: arch_app/templates/arch_app/emails/delete_account_confirmation_email.html:11
+msgid "All personal data has been removed from the server."
+msgstr "Alle persönlichen Daten wurden gelöscht."
+
+#: arch_app/templates/arch_app/emails/delete_account_confirmation_email.html:13
+#: arch_app/templates/arch_app/emails/feedback_email.html:17
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:20
+#: arch_app/templates/arch_app/emails/password_changed_email.html:16
+#: templates/registration/password_reset_email.html:17
+#: templates/registration/welcome_email.html:13
+msgid "Best regards"
+msgstr "Mit freundlichen Grüßen"
+
+#: arch_app/templates/arch_app/emails/feedback_email.html:7
+msgid "Feedback Message"
+msgstr "Feedback"
+
+#: arch_app/templates/arch_app/emails/feedback_email.html:10
+msgid "Dear Sir or Madam"
+msgstr "Sehr geehrte/r Administrator/in"
+
+#: arch_app/templates/arch_app/emails/feedback_email.html:11
+msgid "A user sent a feedback message from "
+msgstr "Ein Nutzer schickte eine anonyme Feedback-Nachricht von der Seite "
+
+#: arch_app/templates/arch_app/emails/feedback_email.html:12
+msgid "Message:"
+msgstr "Nachricht:"
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:7
+msgid "Hiding Account"
+msgstr "Account deaktivieren"
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:10
+#: arch_app/templates/arch_app/emails/password_changed_email.html:10
+msgid "Dear"
+msgstr "Hallo"
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:11
+msgid "You personal data has been hidden from "
+msgstr "Deine persönlichen Daten wurden verborgen auf der Seite "
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:12
+msgid ""
+"This includes all comments, photos and information shown to other members."
+msgstr ""
+"Dies beinhaltet alle Kommentare, Fotos und Informationen welche für andere "
+"Mitglieder sichtbar waren."
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:13
+msgid "We pixelated all photos related to you."
+msgstr "Es wurden alle mit dem Account assoziierten Fotos verpixelt."
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:14
+msgid ""
+"If you change your mind and want to visit the archive again, you can just "
+"log in with your account and all data will be restored."
+msgstr ""
+"Falls Du Deine Meinung änderst und das Archiv wieder besuchen möchtest, "
+"kannst Du Dich einfach mit Deinem Account einloggen und alle Daten werden "
+"wiederhergestellt."
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:16
+msgid ""
+"If you want to permanently delete your account and all your personal data, "
+"follow the link below."
+msgstr ""
+"Falls Du Deinen Account und alle Deine persönlichen Daten vollständig "
+"löschen möchtest, kannst Du den folgenden Link benutzen."
+
+#: arch_app/templates/arch_app/emails/hide_personal_data_confirmation_email.html:18
+msgid "Warning, this cannot be undone!"
+msgstr "Achtung, dieser Vorgang kann nicht rückgängig gemacht werden!"
+
+#: arch_app/templates/arch_app/emails/password_changed_email.html:7
+msgid "Password Changed"
+msgstr "Passwort wurde geändert"
+
+#: arch_app/templates/arch_app/emails/password_changed_email.html:11
+msgid "This is a confirmation email to inform you that your password for "
+msgstr ""
+"Dies ist eine Bestätigungs-Mail, um dich darüber zu informieren, dass das "
+"Passwort für "
+
+#: arch_app/templates/arch_app/emails/password_changed_email.html:11
+msgid "has been successfully changed"
+msgstr "erfolgreich geändert wurde."
+
+#: arch_app/templates/arch_app/emails/password_changed_email.html:13
+msgid ""
+"If you did not request this password change or believe this is a mistake, "
+"please contact our support team immediately."
+msgstr ""
+"Wenn Du diese Passwortänderung nicht angefordert hast oder glaubst, dass "
+"hier ein Fehler vorliegt, kontaktiere bitte sofort den Support."
+
+#: arch_app/templates/arch_app/forms/album_form.html:34
+#: arch_app/templates/arch_app/partials/album_item.html:44
+msgid "Time span covered by this Album"
+msgstr "Zeitspanne des Albums"
+
+#: arch_app/templates/arch_app/forms/album_form.html:49
+msgid "Number of entries in this Album"
+msgstr "Anzahl der Einträge in diesem Album"
+
+#: arch_app/templates/arch_app/forms/album_form.html:58
+msgid "Author of the Album"
+msgstr "Ersteller des Albums"
+
+#: arch_app/templates/arch_app/forms/album_form.html:71
+msgid "Album description"
+msgstr "Beschreibung des Albums"
+
+#: arch_app/templates/arch_app/forms/archive_form.html:23
+#: arch_app/templates/arch_app/forms/archive_form.html:38
+msgid "click to change profile picture"
+msgstr "Klicken, um das Profilbild zu ändern"
+
+#: arch_app/templates/arch_app/forms/archive_form.html:29
+msgid "Group picture"
+msgstr "Gruppenbild"
+
+#: arch_app/templates/arch_app/forms/archive_form.html:57
+#: arch_app/templates/arch_app/forms/file_upload_form.html:22
+#: arch_app/templates/arch_app/forms/profile_form.html:138
+#: arch_app/templates/arch_app/forms/record_form.html:219
+msgid "Save"
+msgstr "Speichern"
+
+#: arch_app/templates/arch_app/forms/change_password.html:15
+#: arch_app/templates/arch_app/forms/profile_form.html:141
+#: arch_app/templates/arch_app/members.html:174
+#: arch_app/templates/arch_app/partials/record/record_item.html:145
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: arch_app/templates/arch_app/forms/feedback_form.html:17
+msgid "Your message is sent anonymously to the Administrator "
+msgstr "Deine Nachricht wird anonym an den Administrator gesendet"
+
+#: arch_app/templates/arch_app/forms/feedback_form.html:21
+msgid "Please contact the Administrator to configure a contact email"
+msgstr ""
+"Bitte kontaktiere den Administrator, um eine Kontakt-Mail zu konfigurieren"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:20
+msgid "Profile picture"
+msgstr "Profilbild"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:48
+msgid "Change Photo"
+msgstr "Profilbild ändern"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:50
+msgid "Upload Photo"
+msgstr "Foto Hochladen"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:101
+msgid "Username"
+msgstr "Nutzername"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:107
+msgid "First Name"
+msgstr "Vorname"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:114
+msgid "Last Name"
+msgstr "Nachname"
+
+#: arch_app/templates/arch_app/forms/profile_form.html:128
+msgid "Date of Birth"
+msgstr "Geburtsdatum"
+
+#: arch_app/templates/arch_app/forms/record_form.html:27
+msgid "Title"
+msgstr "Titel"
+
+#: arch_app/templates/arch_app/forms/record_form.html:40
+msgid "created by "
+msgstr "erstellt von "
+
+#: arch_app/templates/arch_app/forms/record_form.html:47
+msgid "Who was there?"
+msgstr "Wer war dabei?"
+
+#: arch_app/templates/arch_app/forms/record_form.html:94
+#: arch_app/templates/arch_app/forms/record_form.html:118
+msgid "Remove user"
+msgstr "Nutzer entfernen"
+
+#: arch_app/templates/arch_app/forms/record_form.html:148
+msgid "When was this taken?"
+msgstr "Wann fand dies statt?"
+
+#: arch_app/templates/arch_app/forms/record_form.html:162
+msgid "Where was this taken?"
+msgstr "Wo fand dies statt?"
+
+#: arch_app/templates/arch_app/forms/record_form.html:200
+msgid "Description"
+msgstr "Beschreibung"
+
+#: arch_app/templates/arch_app/forms/upload_form.html:19
+#: arch_app/templates/arch_app/forms/upload_form.html:20
+#: arch_app/templates/arch_app/partials/upload_button.html:10
+#: arch_app/templates/arch_app/partials/upload_button.html:22
+msgid "Upload"
+msgstr "Upload"
+
+#: arch_app/templates/arch_app/home.html:42
+msgid "Group profile picture"
+msgstr "Gruppenprofilbild"
+
+#: arch_app/templates/arch_app/home.html:55
+msgid "Sorry, you are not a member of any group yet."
+msgstr "Es tut uns leid, du bist noch kein Mitglied einer Gruppe."
+
+#: arch_app/templates/arch_app/home.html:61
+msgid "Send us"
+msgstr "Schicke uns"
+
+#: arch_app/templates/arch_app/home.html:64
+msgid "Feedback"
+msgstr "Feedback"
+
+#: arch_app/templates/arch_app/manage_albums.html:8
+#: arch_app/templates/arch_app/manage_albums.html:22
+msgid "Manage Albums"
+msgstr "Alben konfigurieren"
+
+#: arch_app/templates/arch_app/members.html:36
+msgid "New Member"
+msgstr "Neues Mitglied"
+
+#: arch_app/templates/arch_app/members.html:46
+msgid "Add a new Member"
+msgstr "Mitglied hinzufügen"
+
+#: arch_app/templates/arch_app/members.html:59
+msgid "group members"
+msgstr "Gruppenmitglieder"
+
+#: arch_app/templates/arch_app/members.html:98
+msgid "History"
+msgstr "Chronik"
+
+#: arch_app/templates/arch_app/members.html:139
+msgid "Update Membership Dates"
+msgstr "Mitgliedschaft aktualisieren"
+
+#: arch_app/templates/arch_app/members.html:145
+#: arch_app/templates/arch_app/members.html:191
+msgid "present"
+msgstr "heute"
+
+#: arch_app/templates/arch_app/members.html:157
+msgid "Update Membership of "
+msgstr "Mitgliedschaft von "
+
+#: arch_app/templates/arch_app/members.html:167
+msgid "Update when the user joined or left the group"
+msgstr "Aktualisiere wann der Nutzer beigetreten oder ausgetreten ist"
+
+#: arch_app/templates/arch_app/partials/album_list.html:24
+msgid "Options"
+msgstr "Optionen"
+
+#: arch_app/templates/arch_app/partials/album_list.html:32
+msgid "New Album"
+msgstr "Neues Album"
+
+#: arch_app/templates/arch_app/partials/comment.html:21
+msgid "hide comment"
+msgstr "Kommentar verstecken"
+
+#: arch_app/templates/arch_app/partials/comment.html:54
+msgid "show comment"
+msgstr "Kommentar anzeigen"
+
+#: arch_app/templates/arch_app/partials/comment.html:65
+#: arch_app/templates/arch_app/partials/comment.html:81
+msgid "Comment is hidden."
+msgstr "Kommentar ist verborgen."
+
+#: arch_app/templates/arch_app/partials/navbar.html:131
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: arch_app/templates/arch_app/partials/navbar.html:134
+msgid "Administration"
+msgstr "Administration"
+
+#: arch_app/templates/arch_app/partials/navbar.html:140
+msgid "Log out"
+msgstr "Ausloggen"
+
+#: arch_app/templates/arch_app/partials/navbar.html:145
+#: templates/registration/login.html:17 templates/registration/login.html:47
+msgid "Login"
+msgstr "Einloggen"
+
+#: arch_app/templates/arch_app/partials/pagination.html:16
+msgid "First"
+msgstr "Erste"
+
+#: arch_app/templates/arch_app/partials/pagination.html:27
+#: arch_app/templates/arch_app/partials/pagination.html:37
+msgid "Previous"
+msgstr "Vorherige"
+
+#: arch_app/templates/arch_app/partials/pagination.html:79
+#: arch_app/templates/arch_app/partials/pagination.html:88
+msgid "Next"
+msgstr "Nächste"
+
+#: arch_app/templates/arch_app/partials/pagination.html:98
+msgid "Last"
+msgstr "Letzte"
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:8
+msgid "How to hide or delete your account"
+msgstr "Account deaktivieren oder löschen"
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:11
+msgid ""
+"Your personal data is being stored and processed only based on your consent."
+msgstr ""
+"Deine persönlichen Daten werden nur mit deiner Zustimmung gespeichert und "
+"verarbeitet."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:12
+msgid ""
+"It is possible to withdraw your consent on any number of grounds and to hide "
+"or delete any data related to you. "
+msgstr ""
+"Es ist möglich, deine Zustimmung aus beliebigen Gründen zu widerrufen und "
+"alle Daten, die dich betreffen, zu verbergen oder zu löschen."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:15
+msgid "Hiding your account"
+msgstr "Account deaktivieren"
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:17
+msgid "You can hide your account by clicking on the button bellow. "
+msgstr ""
+"Du kannst deinen Account deaktivieren, indem du auf den folgenden Button "
+"klickst."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:18
+msgid ""
+"Hiding your personal data means to anonymize (pixelate) every photo "
+"associated to you and to hide all comments written by you. "
+msgstr ""
+"Deine persönlichen Daten zu verbergen bedeutet, alle Fotos, die mit dir "
+"verbunden sind, zu anonymisieren (zu verpixeln) und alle Kommentare, die du "
+"geschrieben hast, zu verbergen."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:19
+msgid ""
+"If you reactivate your account by logging in again, all your personal data "
+"will be restored. "
+msgstr ""
+"Wenn du deinen Account wieder aktivierst, indem du dich erneut einloggst, "
+"werden alle deine persönlichen Daten wiederhergestellt."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:22
+msgid "Deleting your account"
+msgstr "Account löschen"
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:24
+msgid ""
+"Deleting your account means to permanently pixelate every photo associated "
+"to you and to delete all comments written by you."
+msgstr ""
+"Deinen Account zu löschen bedeutet, alle Fotos, die mit dir verbunden sind, "
+"permanent zu anonymisieren (zu verpixeln) und alle Kommentare, die du "
+"geschrieben hast, zu löschen."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:25
+msgid ""
+"In order to permanently delete your account, you must first hide your "
+"account by clicking on the button below and then follow the instructions in "
+"the confirmation mail send to you. "
+msgstr ""
+"Um deinen Account dauerhaft zu löschen, musst du zuerst deinen Account "
+"deaktivieren, indem du auf den folgenden Button klickst, und dann den "
+"Anweisungen in der Bestätigungs-Mail folgen, die dir zugesendet wird."
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:26
+msgid ""
+"This action cannot be undone and you will lose access to the archive and its "
+"content! "
+msgstr ""
+"Diese Aktion kann nicht rückgängig gemacht werden und du verlierst den "
+"Zugang zum Archiv und seinen Inhalten!"
+
+#: arch_app/templates/arch_app/partials/privacy_settings.html:30
+msgid "Hide my Account"
+msgstr "Account deaktivieren"
+
+#: arch_app/templates/arch_app/partials/record/record_item.html:121
+msgid "Delete this record"
+msgstr "Diesen Eintrag löschen"
+
+#: arch_app/templates/arch_app/partials/record/record_item.html:135
+msgid "Delete Record"
+msgstr "Eintrag löschen"
+
+#: arch_app/templates/arch_app/partials/record/record_item.html:141
+msgid " Are you sure you want to delete this record?"
+msgstr "Willst Du den Eintrag wirklich löschen?"
+
+#: arch_app/templates/arch_app/partials/search_filters.html:40
+msgid "Date"
+msgstr "Datum"
+
+#: arch_app/templates/arch_app/partials/searchbar.html:35
+msgid "Filter"
+msgstr "Filter"
+
+#: arch_app/templates/arch_app/partials/searchbar.html:56
+msgid "Location"
+msgstr "Ort"
+
+#: arch_app/templates/arch_app/partials/searchbar.html:86
+msgid "Start"
+msgstr "Start"
+
+#: arch_app/templates/arch_app/partials/searchbar.html:99
+msgid "End"
+msgstr "Ende"
+
+#: arch_app/templates/arch_app/partials/searchbar.html:115
+msgid "Type"
+msgstr "Typ"
+
+#: arch_app/templates/arch_app/partials/tagbox.html:45
+msgid "Delete this Tag"
+msgstr "Markierung löschen"
+
+#: arch_app/templates/arch_app/partials/tagbox.html:49
+msgid "pixelate image"
+msgstr "Verpixeln"
+
+#: arch_app/templates/arch_app/partials/tagbox.html:69
+msgid "undo pixelation"
+msgstr "Verpixelung rückgängig machen"
+
+#: arch_app/templates/arch_app/search.html:43
+msgid "I am sorry, we could not find any results for your query."
+msgstr "Es tut uns leid, wir konnten keine Ergebnisse für deine Suche finden."
+
+#: arch_app/views.py:91
+msgid "Your data was successfully restored and made visible again."
+msgstr "Deine Daten wurden erfolgreich wiederhergestellt und sind wieder sichtbar."
+
+#: arch_app/views.py:117
+msgid "Your password has been successfully changed."
+msgstr "Dein Passwort wurde erfolgreich geändert."
+
+#: arch_app/views.py:119 arch_app/views.py:148 arch_app/views.py:249
+msgid ""
+"An error occurred while sending the email. Please Contact the Administrator."
+msgstr ""
+"Es ist ein Fehler beim Senden der E-Mail aufgetreten. Bitte kontaktiere den Administrator."
+
+#: arch_app/views.py:145
+msgid "Your account has been activated! You can now log in."
+msgstr "Dein Account wurde aktiviert! Du kannst dich jetzt einloggen."
+
+#: arch_app/views.py:189
+msgid "You do not have permission to add members to this archive."
+msgstr "Du hast keine Berechtigung Mitglieder zu dieser Gruppe hinzuzufügen."
+
+#: arch_app/views.py:205
+msgid "An existing user with the given username and email was added."
+msgstr ""
+"Ein bestehender Nutzer mit dem angegebenen Nutzernamen und der angegebenen "
+"Mail-Adresse wurde hinzugefügt."
+
+#: arch_app/views.py:208
+msgid ""
+"An existing user with the given username and email is already a member of "
+"this group."
+msgstr ""
+"Ein Nutzer mit dem angegebenen Nutzernamen und der angegebenen E-Mail ist "
+"bereits Mitglied dieser Gruppe."
+
+#: arch_app/views.py:215
+msgid "Username is already taken."
+msgstr "Nutzername ist bereits vergeben."
+
+#: arch_app/views.py:218
+msgid "Email is already taken."
+msgstr "E-Mail-Adresse ist bereits vergeben."
+
+#: arch_app/views.py:246
+msgid ""
+"User was created successfully. An email with an activation link was sent to "
+"the user."
+msgstr ""
+"Ein Nutzer wurde erfolgreich erstellt. Eine E-Mail mit einem "
+"Aktivierungslink wurde an den Nutzer gesendet"
+
+#: arch_app/views.py:264
+msgid "User was created successfully. You can log in now."
+msgstr "Nutzer erfolgreich erstellt. Du kannst Dich jetzt einloggen."
+
+#: arch_app/views.py:282
+msgid "Upload was successful."
+msgstr "Alle Dateien wurden erfolgreich hochgeladen."
+
+#: arch_app/views.py:331
+msgid "The file could not be uploaded. Please check if the file name is too long: "
+msgstr "Die Datei konnte nicht hochgeladen werden. Bitte überprüfe, ob der Dateiname zu lang ist:"
+
+#: arch_app/views.py:337
+msgid "File could not be uploaded: "
+msgstr "Datei konnte nicht hochgeladen werden: "
+
+#: arch_app/views.py:420
+msgid "The file could not be uploaded."
+msgstr "Die Datei konnte nicht hochgeladen werden."
+
+#: arch_app/views.py:444 arch_app/views.py:507 arch_app/views.py:1464
+#: arch_app/views.py:1701
+msgid "You do not have permission to view this page."
+msgstr "Du hast keine Berechtigung diese Seite zu besuchen."
+
+#: arch_app/views.py:456
+msgid "You are not allowed to apply these changes."
+msgstr "Du hast keine Berechtigung diese Änderungen durchzuführen."
+
+#: arch_app/views.py:462
+msgid "Changes were saved successfully."
+msgstr "Änderungen wurden erfolgreich gespeichert."
+
+#: arch_app/views.py:464
+msgid "Changes could not be saved."
+msgstr "Änderungen konnten nicht gespeichert werden."
+
+#: arch_app/views.py:551
+msgid "Your profile picture was successfully saved!"
+msgstr "Dein Profilbild wurde erfolgreich gespeichert!"
+
+#: arch_app/views.py:554 arch_app/views.py:570
+msgid "Could not be saved. Please try again."
+msgstr "Konnte nicht gespeichert werden. Bitte versuche es erneut."
+
+#: arch_app/views.py:560
+msgid "Your profile picture was successfully deleted!"
+msgstr "Dein Profilbild wurde erfolgreich gelöscht!"
+
+#: arch_app/views.py:567
+msgid "Your profile was successfully saved!"
+msgstr "Dein Profil wurde erfolgreich gespeichert!"
+
+#: arch_app/views.py:608
+msgid "You do not have the permission to add this record to this Album."
+msgstr "Du hast keine Berechtigung diesen Eintrag zu diesem Album hinzuzufügen."
+
+#: arch_app/views.py:619
+msgid "This record is already in this album."
+msgstr "Dieser Eintrag ist bereits in diesem Album."
+
+#: arch_app/views.py:692
+msgid "You do not have permission to view this record."
+msgstr "Du hast keine Berechtigung diesen Eintrag zu sehen."
+
+#: arch_app/views.py:706
+msgid "You do not have permission to comment on this record."
+msgstr "Es tut uns leid, du kannst keine Berechtigung Kommentare zu erstellen."
+
+#: arch_app/views.py:719
+msgid "Comment could not be posted."
+msgstr "Kommentar konnte nicht erstellt werden."
+
+#: arch_app/views.py:726
+msgid "You do not have permission to edit this record."
+msgstr "Es tut uns leid, du hast keine Berechtigung diesen Eintrag zu bearbeiten."
+
+#: arch_app/views.py:736
+msgid "Record was saved!"
+msgstr "Eintrag wurde gespeichert!"
+
+#: arch_app/views.py:739
+msgid "Record could not be saved. Please try again."
+msgstr "Der Eintrag konnte nicht gespeichert werden. Bitte versuche es erneut."
+
+#: arch_app/views.py:750
+msgid "You do not have the permission to delete this record."
+msgstr "Du hast keine Berechtigung diesen Eintrag zu löschen."
+
+#: arch_app/views.py:762
+msgid "Record could not be deleted."
+msgstr "Der Eintrag konnte nicht gelöscht werden."
+
+#: arch_app/views.py:778
+msgid "Record was deleted."
+msgstr "Eintrag wurde gelöscht."
+
+#: arch_app/views.py:807
+msgid "You do not have permission to hide this comment."
+msgstr "Du hast keine Berechtigung diesen Kommentar zu verbergen."
+
+#: arch_app/views.py:816
+msgid "Cannot change visibility."
+msgstr "Sichtbarkeit kann nicht geändert werden."
+
+#: arch_app/views.py:992
+msgid "The album you requested does not exist."
+msgstr "Das Album existiert nicht."
+
+#: arch_app/views.py:996
+msgid "You do not have permission to view this album."
+msgstr "Du hast keine Berechtigung dieses Album zu sehen."
+
+#: arch_app/views.py:1030
+msgid "Sorry, you do not have permission to create a new album."
+msgstr "Es tut uns leid, du hast keine Berechtigung ein neues Album zu erstellen."
+
+#: arch_app/views.py:1044
+msgid "Could not create Album. Album with this name already exists."
+msgstr "Es konnte kein Album erstellt werden. Ein Album mit diesem Namen existiert bereits."
+
+#: arch_app/views.py:1057
+msgid "New Album created!"
+msgstr "Ein neues Album wurde erstellt!"
+
+#: arch_app/views.py:1060
+msgid "Could not create a new Album."
+msgstr "Es konnte kein neues Album erstellt werden."
+
+#: arch_app/views.py:1078
+msgid "You do not have permission to change this album."
+msgstr "Du hast keine Berechtigung dieses Album zu bearbeiten."
+
+#: arch_app/views.py:1104
+msgid "You are not allowed to delete this Album."
+msgstr "Du hast keine Berechtigung dieses Album zu löschen."
+
+#: arch_app/views.py:1112
+msgid "Album was deleted."
+msgstr "Album wurde gelöscht."
+
+#: arch_app/views.py:1114
+msgid "Album could not be deleted."
+msgstr "Album konnte nicht gelöscht werden."
+
+#: arch_app/views.py:1270 arch_app/views.py:1297
+msgid "Person was tagged successfully."
+msgstr "Die Person wurde erfolgreich markiert."
+
+#: arch_app/views.py:1272 arch_app/views.py:1299
+msgid "Could not tag person."
+msgstr "Die Person konnte nicht markiert werden."
+
+#: arch_app/views.py:1277
+msgid "Error"
+msgstr "Fehler"
+
+#: arch_app/views.py:1291
+msgid "You do not have permission to tag this person."
+msgstr "Du hast keine Berechtigung diese Person zu markieren."
+
+#: arch_app/views.py:1304 arch_app/views.py:1356
+msgid "Error."
+msgstr "Fehler."
+
+#: arch_app/views.py:1317
+msgid "You do not have permission to tag someone."
+msgstr "Du hast keine Berechtigung jemanden zu markieren."
+
+#: arch_app/views.py:1349
+msgid "Tag created successfully."
+msgstr "Die Markierung wurde erfolgreich erstellt."
+
+#: arch_app/views.py:1351
+msgid "Could not create Tag."
+msgstr "Markierung konnte nicht erstellt werden."
+
+#: arch_app/views.py:1378
+msgid "Could not be deleted."
+msgstr "Konnte nicht gelöscht werden."
+
+#: arch_app/views.py:1379
+msgid "Tag was deleted successfully."
+msgstr "Die Markierung wurde erfolgreich gelöscht."
+
+#: arch_app/views.py:1393
+msgid "You do not have permission to pixelate this image."
+msgstr "Du hast keine Berechtigung dieses Bild zu verpixeln."
+
+#: arch_app/views.py:1397
+msgid "Only images can be pixelated."
+msgstr "Nur Bilder können verpixelt werden."
+
+#: arch_app/views.py:1405
+msgid "Image was pixelated successfully."
+msgstr "Das Bild wurde erfolgreich verpixelt."
+
+#: arch_app/views.py:1416
+msgid "You do not have permission to show this tag."
+msgstr "Du hast keine Berechtigung diese Markierung anzuzeigen."
+
+#: arch_app/views.py:1424
+msgid "Tag was shown successfully."
+msgstr "Die Markierung wurde erfolgreich sichtbar gemacht."
+
+#: arch_app/views.py:1485
+msgid "Feedback was sent successfully."
+msgstr "Die Nachricht wurde erfolgreich gesendet."
+
+#: arch_app/views.py:1487 arch_app/views.py:1491
+msgid "Feedback could not be sent."
+msgstr "Nachricht konnte nicht gesendet werden."
+
+#: arch_app/views.py:1540
+msgid ""
+"Your personal data was hidden successfully. You will receive a confirmation "
+"email."
+msgstr ""
+"Deine persönlichen Daten wurden erfolgreich verborgen. Du erhältst eine "
+"Bestätigungs-Mail."
+
+#: arch_app/views.py:1542 arch_app/views.py:1591
+msgid ""
+"An error occurred while sending the confirmation email. Please contact the "
+"Administrator.."
+msgstr ""
+"Es ist ein Fehler beim Senden der Bestätigungs-Mail aufgetreten. Bitte "
+"kontaktiere den Administrator."
+
+#: arch_app/views.py:1589
+msgid ""
+"Your account was deleted successfully. You will receive a confirmation email."
+msgstr ""
+"Dein Account wurde erfolgreich gelöscht. Du erhältst eine Bestätigungs-Mail."
+
+#: arch_app/views.py:1594
+msgid "You cannot delete this account."
+msgstr "Du kannst diesen Account nicht löschen."
+
+#: arch_app/views.py:1712
+msgid "Membership date was changed successfully."
+msgstr "Das Datum der Mitgliedschaft wurde erfolgreich geändert."
+
+#: templates/admin/base_site.html:3
+msgid "Django site admin"
+msgstr "Django Admin Seite"
+
+#: templates/registration/activation_email.html:7
+#: templates/registration/activation_email.html:19
+msgid "Activate Your Account"
+msgstr "Aktiviere deinen Account"
+
+#: templates/registration/activation_email.html:10
+#: templates/registration/welcome_email.html:7
+#: templates/registration/welcome_email.html:10
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: templates/registration/activation_email.html:12
+msgid "Recently an account was created for you."
+msgstr "Vor kurzem wurde ein Account für Dich erstellt."
+
+#: templates/registration/activation_email.html:13
+msgid "Use your username and password to log in:"
+msgstr "Nutze deinen Nutzernamen und dein Passwort, um dich einzuloggen:"
+
+#: templates/registration/activation_email.html:16
+msgid "Please change this password immediately! "
+msgstr "Bitte ändere dieses Passwort direkt nach der Anmeldung!"
+
+#: templates/registration/activation_email.html:18
+msgid "To activate your account, please click the following link: "
+msgstr "Um deinen Account zu aktivieren, klicke bitte auf den folgenden Link: "
+
+#: templates/registration/activation_email.html:21
+msgid ""
+"In case the activation link is not working, try to access the website via "
+"the normal login page."
+msgstr ""
+"Falls der Aktivierungslink nicht mehr gültig ist, versuche die Website über "
+"die normale Login-Seite zu erreichen."
+
+#: templates/registration/activation_email.html:22
+msgid "If the problem persists, contact a moderator or your administrator."
+msgstr ""
+"Falls das Problem weiterhin besteht, kontaktiere einen Moderator oder Administrator."
+
+#: templates/registration/activation_email.html:24
+msgid "Kind regards"
+msgstr "Mit freundlichen Grüßen"
+
+#: templates/registration/login.html:24
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+"Dein Nutzername und Passwort passen nicht zusammen. Versuche es bitte nochmal."
+
+#: templates/registration/login.html:29
+msgid ""
+"Your account doesn't have access to this page. To proceed, please login with "
+"an account that has access."
+msgstr ""
+"Du hast keinen Zugriff auf diese Seite. Melde dich bitte mit einem anderen "
+"Account an, um auf die Seite zugreifen zu können."
+
+#: templates/registration/login.html:31
+msgid "Please enter your credentials below to login."
+msgstr "Bitte melde Dich an."
+
+#: templates/registration/login.html:52
+msgid "Lost password?"
+msgstr "Passwort vergessen?"
+
+#: templates/registration/password_reset_email.html:7
+msgid "Password reset"
+msgstr "Passwort zurücksetzen"
+
+#: templates/registration/password_reset_email.html:10
+msgid "Hello"
+msgstr "Hallo"
+
+#: templates/registration/password_reset_email.html:11
+msgid ""
+"You are receiving this email because you requested a password reset for your "
+"user account with the email"
+msgstr ""
+"Du erhältst diese E-Mail, weil eine Anfrage zum Zurücksetzen des Passworts "
+"gestellt wurde für deinen Account mit der E-Mail-Adresse"
+
+#: templates/registration/password_reset_email.html:12
+msgid "Follow the link below to set a new password:"
+msgstr "Nutze dem folgenden Link, um ein neues Passwort zu setzen:"
+
+#: templates/registration/password_reset_email.html:13
+msgid "Reset password"
+msgstr "Passwort zurücksetzen?"
+
+#: templates/registration/password_reset_email.html:14
+msgid ""
+"In case you cannot open the link above, please copy and pase the link below "
+"into your browser:"
+msgstr ""
+"Falls du den Link nicht öffnen kannst, kopiere bitte den folgenden Link und "
+"füge ihn in deinen Browser ein:"
+
+#: templates/registration/password_reset_email.html:16
+msgid "If you did not asked for a password reset, please ignore this email."
+msgstr ""
+"Falls du nicht um ein Zurücksetzen des Passworts gebeten hast, ignoriere "
+"diese E-Mail bitte."
+
+#: templates/registration/signup.html:13 templates/registration/signup.html:21
+msgid "Sign Up"
+msgstr "Anmelden"
+
+#: templates/registration/welcome_email.html:11
+msgid "Your account was successfully activated! "
+msgstr "Dein Account wurde erfolgreich aktiviert!"
+
+#: templates/registration/welcome_email.html:12
+msgid "Please remember to change your generated password. "
+msgstr "Bitte vergiss nicht, dein generiertes Passwort zu ändern."
+
+#~ msgid "There are no record in this album."
+#~ msgstr "Es sind keine Einträge in diesem Album."
+
+#~ msgid "Usage statistics"
+#~ msgstr "Nutzungsstatistiken"
+
+#~ msgid "The account was deleted successfully."
+#~ msgstr "Der Account wurde erfolgreich gelöscht."
+
+#~ msgid "If you did not create an account, please ignore this email."
+#~ msgstr "Fall du keinen Account erstellt hast, ignoriere diese E-Mail bitte."
+
+#~ msgid "Delete Account "
+#~ msgstr "Account löschen"
+
+#~ msgid "Download"
+#~ msgstr "Herunterladen"
+
+#~ msgid "To log in please use this password:"
+#~ msgstr "Nutze das folgende Passwort, um dich einzuloggen:"
+
+#~ msgid "staff"
+#~ msgstr "Mitarbeitender"
+
+#~ msgid "resident"
+#~ msgstr "Bewohner"
+
+#~ msgid "Uploads"
+#~ msgstr "Uploads"
+
+#~ msgid "Album title"
+#~ msgstr "Album-Titel"
+
+#~ msgid "Album details"
+#~ msgstr "Details des Albums"
+
+#~ msgid "Who created this album?"
+#~ msgstr "Wer hat dieses Album erstellt?"
+
+#~ msgid "Who can see this?"
+#~ msgstr "Wer kann dieses Album ansehen?"
+
+#~ msgid ""
+#~ "Use the Ctrl-key to select multiple users. Submit to safe your changes."
+#~ msgstr ""
+#~ "Nutze die Strg-Taste um mehrere Nutzer*innen auszuwählen. Speichere deine "
+#~ "Änderungen."
+
+#~ msgid "When was this?"
+#~ msgstr "Wann fand dies statt?"
+
+#~ msgid "How many entries?"
+#~ msgstr "Wie viele Einträge?"
+
+#~ msgid "Group details"
+#~ msgstr "Gruppendetails"
+
+#~ msgid "See who is a member of "
+#~ msgstr "Hier geht es zu dem Mitgliedern von "
+
+#~ msgid "Tag Person"
+#~ msgstr "Markiere eine Person"
+
+#~ msgid "Current Members:"
+#~ msgstr "Aktuelle Mitglieder:"
+
+#~ msgid "Sign up"
+#~ msgstr "Anmelden"
+
+#~ msgid "Page"
+#~ msgstr "Seite"
+
+#~ msgid "next"
+#~ msgstr "nächste"
+
+#~ msgid "last"
+#~ msgstr "letzte"
+
+#~ msgid "What do you want to upload?"
+#~ msgstr "Was möchtest du hochladen?"
+
+#~ msgid "Album was updated successfully"
+#~ msgstr "Das Album wurde erfolgreich aktualisiert"
+
+#~ msgid "Album with this name already exists."
+#~ msgstr "Ein Album mit diesem Namen existiert bereits."
+
+#~ msgid "Enter the archive!"
+#~ msgstr "Ab ins Archiv!"
+
+#~ msgid "Website still under construction"
+#~ msgstr "Diese Webseite ist noch in der Entwicklung."
+
+#~ msgid "Use the search bar to find record"
+#~ msgstr "Suche in der Suchleiste nach Medien"
+
+#~ msgid "This creator's name is too long."
+#~ msgstr "Der Name ist zu lang."
+
+#~ msgid "Select a folder to upload"
+#~ msgstr "Wähle einen Ordner zum Hochladen"
+
+#~ msgid "can be accessed by: "
+#~ msgstr "Zugänglich für: "
+
+#~ msgid "welcome to the group gallery!"
+#~ msgstr "willkommen zum Gemeinschafftsalbum!"
+
+#~| msgid "There are no MediaPackages in the archive."
+#~ msgid "There are no photos in the group gallery."
+#~ msgstr "Es sind keine Einträge (MediaPackages) im Archiv."
+
+#~ msgid "Welcome to the house!"
+#~ msgstr "Willkommen im Haus"
+
+#~ msgid "The House"
+#~ msgstr "Das Haus"
+
+#~ msgid "Current MediaPackages in the DB:"
+#~ msgstr "Aktuelle Einträge (MediaPackages) in der Datenbank:"
+
+#~ msgid "this is a test"
+#~ msgstr "Dies ist ein Test"

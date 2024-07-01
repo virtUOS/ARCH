@@ -1,0 +1,35 @@
+{% extends "arch_app/account_settings.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block account_settings %}
+    <div class="tab-pane fade active show">
+        <div class="card-body align-items-center">
+            <h4>{% trans "How to hide or delete your account" %}</h4>
+
+            <div class="text-secondary">
+                {% trans "Your personal data is being stored and processed only based on your consent." %}
+                {% trans "It is possible to withdraw your consent on any number of grounds and to hide or delete any data related to you. " %}
+            </div>
+            <br>
+            <h4>{% trans "Hiding your account" %}</h4>
+            <div class="text-secondary">
+                {% trans "You can hide your account by clicking on the button bellow. " %}
+                {% trans "Hiding your personal data means to anonymize (pixelate) every photo associated to you and to hide all comments written by you. " %}
+                {% trans "If you reactivate your account by logging in again, all your personal data will be restored. " %}
+            </div>
+            <br>
+            <h4>{% trans "Deleting your account" %}</h4>
+            <div class="text-secondary">
+                {% trans "Deleting your account means to permanently pixelate every photo associated to you and to delete all comments written by you." %}
+                {% trans "In order to permanently delete your account, you must first hide your account by clicking on the button below and then follow the instructions in the confirmation mail send to you. " %}
+                {% trans "This action cannot be undone and you will lose access to the archive and its content! " %}
+            </div>
+            <br>
+            <a class="btn btn-warning" href="{% url "arch_app:hide_personal_data" %}">
+                {% trans "Hide my Account" %}
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

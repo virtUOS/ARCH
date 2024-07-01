@@ -1,0 +1,19 @@
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% trans "Feedback Message" %}</title>
+</head>
+<body>
+<h3>{% trans 'Dear Sir or Madam' %}</h3>
+<p>{% trans 'A user sent a feedback message from ' %}{{ hostname }}</p>
+<h4>{% trans 'Message:' %}</h4>
+<p>{{ message }}</p>
+<p>{{ timestamp }}</p>
+<br>
+
+<p>{% trans "Best regards" %}</p>
+</body>
+</html>

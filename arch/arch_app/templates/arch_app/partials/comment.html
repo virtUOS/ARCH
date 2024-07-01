@@ -1,0 +1,84 @@
+{% load i18n %}
+{% load static %}
+{% load guardian_tags %}
+
+
+{# get user permissions #}
+{% get_obj_perms user for comment.record.album.archive as "archive_perms" %}
+
+{% if comment.visible == 'visible' %}
+    <div class="row justify-content-start mx-0 py-0">
+        <div class="col-9 text-muted font-weight-normal small">
+            <span>{{ comment.user.username }}</span>
+            <span class="small" style="float: right;">{{ comment.created_on }}</span>
+        </div>
+
+        {% if "is_moderator" in archive_perms %}
+            <div class="col-3">
+            <span>
+                <a class="btn btn-sm p-0 m-0"
+                   href="{% url 'arch_app:hide_comment' comment.id %}">
+                    <i class="bi bi-eye" title="{% trans "hide comment" %}"></i>
+                </a>
+            </span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row mx-0 py-0 px-2 pb-2">
+        <div class="col-2">
+            {% if comment.user.profile_picture %}
+                <img class="rounded-circle border overflow-hidden"
+                     style="height: 2.5rem; width: 2.5rem; object-fit: cover;"
+                     src="{{ comment.user.profile_picture.url }}"
+                     alt="User Profile"
+                     loading="lazy">
+            {% else %}
+                <i class="bi bi-person-circle" style="font-size: 2.5rem;"></i>
+            {% endif %}
+        </div>
+        <div class="col-10 border rounded py-1 px-2 text-break">{{ comment.text | linebreaksbr }}</div>
+    </div>
+
+{% elif comment.visible == 'hidden_by_mod' %}
+
+    <div class="row justify-content-start mx-0 py-0">
+        <div class="col-9 text-muted font-weight-normal small">
+            <span class="small" style="float: right;">{{ comment.created_on }}</span>
+        </div>
+        {% if "is_moderator" in archive_perms %}
+            <div class="col-3">
+            <span>
+                <a class="btn btn-sm p-0 m-0"
+                   href="{% url 'arch_app:hide_comment' comment.id %}">
+                    <i class="bi bi-eye-slash" title="{% trans "show comment" %}"></i>
+                </a>
+            </span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row mx-0 py-0 px-2 pb-2">
+        <div class="col-2">
+            <i class="bi bi-person-circle" style="font-size: 2.5rem;"></i>
+        </div>
+        <div class="col-10 rounded py-1 px-2 small">{% trans "Comment is hidden." %}</div>
+    </div>
+
+{% else %}
+
+    <div class="row justify-content-start mx-0 py-0">
+        <div class="col-9 text-muted font-weight-normal small">
+            <span class="small" style="float: right;">{{ comment.created_on }}</span>
+        </div>
+
+    </div>
+
+    <div class="row mx-0 py-0 px-2 pb-2">
+        <div class="col-2">
+            <i class="bi bi-person-circle" style="font-size: 2.5rem;"></i>
+        </div>
+        <div class="col-10 rounded py-1 px-2 small">{% trans "Comment is hidden." %}</div>
+    </div>
+
+{% endif %}

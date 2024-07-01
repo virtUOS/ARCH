@@ -1,0 +1,11 @@
+{% load i18n %}
+
+
+<form action="{% url 'arch_app:tag_user' tag.id %}"
+      method="POST" enctype="multipart/form-data"
+      onchange="this.submit();">
+    {% csrf_token %}
+
+    {{ tag_form.user }}
+
+</form>

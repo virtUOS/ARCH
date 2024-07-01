@@ -1,0 +1,55 @@
+{% extends "arch_app/base.html" %}
+{% load i18n %}
+
+
+{% block title %}Login{% endblock %}
+
+{% block navbar %}
+    {% include "arch_app/partials/navbar.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="card shadow rounded">
+        <div class="card-header">
+            <h2>{% trans "Login" %}</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="container">
+
+                {% if form.errors %}
+                    <p>{% trans "Your username and password didn't match. Please try again." %}</p>
+                {% endif %}
+
+                {% if next %}
+                    {% if user.is_authenticated %}
+                        <p>{% trans "Your account doesn't have access to this page. To proceed, please login with an account that has access." %}</p>
+                    {% else %}
+                        <p>{% trans "Please enter your credentials below to login." %}</p>
+                    {% endif %}
+                {% endif %}
+
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td>{{ form.username.label_tag }}</td>
+                            <td>{{ form.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.password.label_tag }}</td>
+                            <td>{{ form.password }}</td>
+                        </tr>
+                    </table>
+                    <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+                    <input type="hidden" name="next" value="{{ next }}">
+                </form>
+
+                {# Assumes you setup the password_reset view in your URLconf #}
+                <p><a href="{% url 'password_reset' %}">{% trans "Lost password?" %}</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

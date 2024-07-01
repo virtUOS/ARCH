@@ -1,0 +1,43 @@
+{% extends "./base.html" %}
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+
+
+{% block title %}
+    {% trans "Manage Albums" %}
+{% endblock %}
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+
+
+{% block content %}
+    {% include "./partials/spinner.html" %}
+    <div class="container-fluid">
+
+        <div class="row mb-3 py-2 justify-content-center">
+            <div class="col-md-8 mx-auto py-2">
+                <h3 class="text-center">{% trans "Manage Albums" %}</h3>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                {% if album_list %}
+                    {% for album in album_list %}
+                        <div class="row py-2">
+                            <div class="col-md-12 py-2 border rounded">
+                                {% get_album_form album as album_form %}
+                                {% include "./forms/album_form.html" %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,226 @@
+{% load static %}
+{% load i18n %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+
+{% block sidebar %}
+
+    {# show when sidebar is hidden #}
+    <div id="sidebar-collapsed-id"
+         class="col-md-1 arch-sidebar collapse show sticky-top z-3 pl-0"
+         style="transition: none;">
+        <div class="sticky-top pt-3 pl-0">
+            <div class="card text-center sticky-top" style="width: fit-content">
+                <div class="card-header" style="width: fit-content">
+                    <button id="button-sidebar-open"
+                            class="btn btn-secondary-light sticky-top d-flex"
+                            data-bs-target=".arch-sidebar"
+                            data-bs-toggle="collapse">
+                        <i class="bi bi-caret-right-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Sidebar #}
+    <div id="sidebar-id"
+         class="col-auto col-xl-3 col-md-4 col-sm-12 arch-sidebar collapse hide sticky-top z-1 pl-0"
+         style="transition: none;">
+        <div class="sticky-top pt-3 pl-0">
+
+            <div class="card text-center sticky-top">
+                <div class="card-header">
+
+                    <ul class="nav nav-tabs card-header-tabs pl-2" data-bs-tabs="tabs">
+
+                        <li class="pr-3">
+                            <button id="button-sidebar-close"
+                                    class="btn btn-secondary-light d-flex"
+                                    data-bs-target=".arch-sidebar"
+                                    data-bs-toggle="collapse">
+                                <i class="bi bi-caret-left-fill"></i>
+                            </button>
+                        </li>
+
+                        {% get_archives_for_user user as archives %}
+                        {% for archive in archives %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if forloop.first %}active{% endif %} btn-outline-primary"
+                                   data-bs-toggle="tab"
+                                   href="#tab-{{ archive.id }}">{{ archive.name }}</a>
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <form class="card-body tab-content sticky-top">
+
+                    {% for archive in archives %}
+
+                        <div id="tab-{{ archive.id }}" class="tab-pane  {% if forloop.first %}active{% endif %}">
+
+                            {# Inbox #}
+                            <div class="pb-3 text-start">
+                                <a href="{% url 'arch_app:album' archive.inbox.id %}"
+                                   class="btn btn-primary position-relative me-5  border rounded"
+                                   data-bs-parent="#sidebar">
+                                    <i class="bi bi-mailbox"></i>
+                                    <b>{% trans "Inbox" %}</b>
+
+                                    {% get_obj_perms user for archive as "archive_perms" %}
+                                    {% if "is_moderator" in archive_perms %}
+                                        {% if archive.inbox.record_list.all|length %}
+                                            <span class="position-absolute top-0 start-80 translate-middle badge badge-circle badge-warning z-3">
+                                            {{ archive.inbox.record_list.all|length }}
+                                        </span>
+                                        {% endif %}
+                                    {% endif %}
+
+                                </a>
+                            </div>
+
+                            {# Albums #}
+                            <div id="sidebar-nav"
+                                 class="list-group border rounded text-start sticky-top py-1 bg-light scrollable-div"
+                                 style="min-height: 80px; max-height: 40vh;">
+
+                                {% for album in archive.albums.all %}
+                                    {% if album != archive.inbox %}
+                                        {% get_obj_perms user for album as "album_perms" %}
+                                        {% if "view_album" in album_perms or user in archive.get_active_moderators %}
+
+                                            <div class="album p-1" data-id="{{ album.id }}">
+                                                <a href="{% url 'arch_app:album' album.id %}"
+                                                   class="list-group-item no-border rounded bg-light d-inlidne-block text-truncate"
+                                                   data-bs-parent="#sidebar">
+                                                    <i class="bi bi-folder"></i> <span> {{ album.title }}</span>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </form>
+            </div>  <!-- card -->
+        </div>  <!-- sticky-top -->
+
+    </div>  <!-- sidebar -->
+
+
+
+
+
+    {##}
+    {#    <div class="col-3">#}
+    {##}
+    {#        <div class="px-2 bg-dark rounded" style="height: 100%;">#}
+    {##}
+    {#            {% get_archives_for_user user as archives %}#}
+    {#            {% for archive in archives %}#}
+    {##}
+    {#                <div class="row py-3 px-1">#}
+    {#                    <div class="col-md-12">#}
+    {##}
+    {# Header with Group name #}
+    {#                        <div class="row px-1">#}
+    {#                            <div class="col">#}
+    {#                                <a href="{% url 'arch_app:archive' archive.name archive.id %}">#}
+    {#                                <div class="d-flex align-items-end">#}
+    {#                                    <i class="bi bi-house fs-2 text-primary pr-2"></i>#}
+    {#                                    <h4 class="text-center">{{ archive.name }}</h4>#}
+    {#                                </div>#}
+    {#                                </a>#}
+    {#                                <hr class="m-0">#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {##}
+    {# Inbox #}
+    {#                        <div class="row px-3">#}
+    {#                            <div class="col">#}
+    {#                                <div class="d-flex">#}
+    {#                                    <a href="{% url 'arch_app:album' archive.inbox.id %}">#}
+    {#                                        <i class="bi bi-mailbox fs-2 text-primary pr-2"></i>#}
+    {#                                        {% trans "Inbox" %}#}
+    {#                                    </a>#}
+    {#                                </div>#}
+    {#                            </div>#}
+    {#                        </div>#}
+    {##}
+    {# Albums button to toggle seeing all albums #}
+    {#                        <div class="row px-3">#}
+    {#                            <div class="col-md-8">#}
+    {#                                <div class="btn-toggle keep-state-button"#}
+    {#                                     data-bs-toggle="collapse"#}
+    {#                                     data-bs-target="#albums-{{ archive.id }}-collapse"#}
+    {#                                     aria-expanded="false"#}
+    {#                                     id="keep-button-state-{{ archive.id }}"#}
+    {#                                     onclick="toggleButtonState(this.id)">#}
+    {#                                    <a class="pr-1" href="#">#}
+    {#                                        <i class="bi bi-folder2-open fs-2 text-primary pr-2"></i>#}
+    {#                                        {% trans "Albums" %}#}
+    {#                                    </a>#}
+    {#                                </div>#}
+    {#                            </div>#}
+    {##}
+    {#                        </div>#}
+    {# End of Albums button #}
+    {##}
+    {# List of all Albums #}
+    {#                        <div class="row px-3 py-1">#}
+    {#                            <div class="col collapse hide scrollable-div border rounded mx-1 py-2"#}
+    {#                                 id="albums-{{ archive.id }}-collapse"#}
+    {#                                 style="min-height: 80px; max-height: 20rem;">#}
+    {##}
+    {#                                {% for album in archive.albums.all %}#}
+    {#                                    {% if album != archive.inbox %}#}
+    {# check permission for album #}
+    {#                                        {% get_obj_perms user for album as "album_perms" %}#}
+    {#                                        {% if "view_album" in album_perms or user in archive.get_active_moderator %}#}
+    {##}
+    {# Album #}
+    {#                                            <div class="row py-1 mx-auto">#}
+    {##}
+    {# Album name #}
+    {#                                                <div class="col-10 justify-content-start album rounded border py-1"#}
+    {#                                                     data-id="{{ album.id }}">#}
+    {#                                                    <a href="{% url 'arch_app:album' album.id %}"#}
+    {#                                                       style="width: 100%">#}
+    {#                                                        <div class="text-truncate p-1">#}
+    {#                                                            {{ album.title }}#}
+    {#                                                        </div>#}
+    {#                                                    </a>#}
+    {#                                                </div>#}
+    {##}
+    {#                                            </div>#}
+    {##}
+    {#                                        {% endif %}#}
+    {##}
+    {#                                    {% endif %}#}
+    {#                                {% endfor %}#}
+    {##}
+    {#                            </div>#}
+    {##}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {##}
+    {#    </div>#}
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        window.arch.initSidebar();
+    </script>
+{% endblock %}

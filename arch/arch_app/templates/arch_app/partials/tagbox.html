@@ -1,0 +1,74 @@
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+{% load mathfilters %}
+{% load guardian_tags %}
+
+
+{# get user permissions #}
+{% get_obj_perms user for tagbox.record.album.archive as "archive_perms" %}
+
+
+<div class="tag-box m-0" id="tag-{{ tagbox.id }}"
+        {# calculate the position of the box based on the size of the image #}
+     style="top: {{ tagbox.y1|div:tagbox.height|mul:100|stringformat:".2f" }}%;
+             left: {{ tagbox.x1|div:tagbox.width|mul:100|stringformat:".2f" }}%;
+             width: {{ tagbox.x2|sub:tagbox.x1|div:tagbox.width|mul:100|stringformat:".2f" }}%;
+             height: {{ tagbox.y2|sub:tagbox.y1|div:tagbox.height|mul:100|stringformat:".2f" }}%;
+             position: absolute;
+             {% if tagbox.visible == "visible" %}
+                 border: solid thin white;
+             {% endif %}
+             "
+        {% if tagbox.visible == 'visible' %}
+     title="{{ tagbox.user.username }}"
+        {% endif %}>
+
+    {# TagBox Form #}
+    {% if "is_moderator" in archive_perms %}
+        {% if tagbox.visible == 'visible' %}
+            <div class="dropdown dropright">
+                <a class="toggle" href="#" id="TagUserDropdown-{{ tagbox.id }}" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical text-white"
+                       style="float: right">
+                    </i>
+                </a>
+
+                <div class="dropdown-menu" id="tag-dropdown-menu-{{ tagbox.id }}"
+                     aria-labelledby="TagUserDropdown-{{ tagbox.id }}">
+                    <div class="p-1">
+                        <div class="dropdown-item">
+                            <a href="{% url 'arch_app:delete_tag' tagbox.pk %}"
+                               class="btn btn-sm btn-secondary mx-1" role="button"
+                               style="float: right"
+                               title="{% trans "Delete this Tag" %}">
+                                <i class="bi bi-trash text-danger"></i>
+                            </a>
+                            <a class="btn btn-sm btn-primary mx-1" role="button"
+                               title="{% trans "pixelate image" %}"
+                               style="float: right"
+                               href="{% url 'arch_app:pixelate_image' tagbox.pk %}">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </div>
+                        <div class="dropdown-item">
+                            {% with tag=tagbox %}
+                                {% get_tag_form tag as tag_form %}
+                                {% include "../forms/tag_form.html" %}
+                            {% endwith %}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+        {% if tagbox.visible == 'hidden_by_mod' %}
+            <a href="{% url "arch_app:show_tag" tagbox.id %}"
+               title="{% trans "undo pixelation" %}">
+                <i class="bi bi-eye-slash fs-1 text-white" style="float: right"></i>
+            </a>
+        {% endif %}
+    {% endif %}
+</div>

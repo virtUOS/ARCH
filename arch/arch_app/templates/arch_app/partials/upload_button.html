@@ -1,0 +1,41 @@
+{% load i18n %}
+{% load guardian_tags %}
+{% load arch_tags %}
+
+
+{% if user.is_authenticated %}
+
+    <div class="d-flex justify-content-center" style="height: 100%;">
+        <div class="dropdown my-auto">
+            <a class="btn btn-dark px-1 py-0 my-0" title="{% trans "Upload" %}" href="#"
+               id="uploadDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex">
+                    {#                    {% trans "Upload" %}#}
+                    <i class="bi bi-cloud-arrow-up fs-4 my-0 py-0 px-1"></i>
+                </div>
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-end"
+                 aria-labelledby="uploadDropdown">
+                <div class="px-2">
+                    <h4 class="text-dark">{% trans "Upload" %}</h4>
+                </div>
+
+                {% get_archives_for_user user as archives %}
+                {% for archive in archives %}
+
+                    <div class="p-2" style="max-width: 70vw;">
+                        <div class="border rounded">
+                            <h5 class="p-0 pl-2 pt-1 m-0 text-primary">{{ archive.name }}</h5>
+                            {% get_upload_form as upload_form %}
+                            {% include 'arch_app/forms/upload_form.html' %}
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endif %}

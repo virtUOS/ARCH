@@ -1,0 +1,225 @@
+{% load i18n %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+
+{% if not record.type == 'Image' %}
+    {# form to tag a person, populated from inside the record-form #}
+    {% get_tag_form users=record.album.archive.get_members.all as tag_form %}
+    <form action="{% url 'arch_app:create_tag' record.pk %}"
+          id="create-tag-form"
+          method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    </form>
+{% endif %}
+
+<form method="post"
+      action="{% url 'arch_app:record' record.pk %}?page={{ current_page }}"
+      enctype="multipart/form-data"
+      class="form-horizontal"
+      id="record-form">
+    {% csrf_token %}
+
+    {# get permissions #}
+    {% get_obj_perms user for record.album.archive as "archive_perms" %}
+    {% get_obj_perms user for record as "record_perms" %}
+
+    <div class="row form-group" title={% trans "Title" %}>
+
+        {% if "is_moderator" in archive_perms or "change_record" in record_perms %}
+            {{ record_form.title.errors }}
+            <div class="col-md-12">
+                <h2 class="py-2">{{ record_form.title }}</h2>
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <h2 class="py-2">{{ record.title }}</h2>
+            </div>
+        {% endif %}
+        <div class="col-md-12 small">
+            {% trans "created by " %} {{ record.creator.username }}
+        </div>
+    </div>
+
+    <hr>
+
+    {# people depicted on the record #}
+    <div class="row form-group mx-0 py-1" title="{% trans "Who was there?" %}">
+        <div class="col-md-2"><i class="bi bi-people"></i></div>
+        <div class="col-md-10">
+            <div class="row justify-content-start " id="tag-container">
+                {% for tag in record.tags.all %}
+                    {% if tag.visible == 'visible' %}
+                        <div class="col-4">
+                            <div class="d-flex">
+                                {% if tag.user.profile_picture %}
+                                    <i class="bi px-1 tag-profile-photo" style="font-size: 1rem;">
+                                        <img class="img-fluid rounded-circle border overflow-hidden"
+                                             style="height: 1rem; width: 1rem; object-fit: cover;"
+                                             src="{{ tag.user.profile_picture.url }}"
+                                             alt="User Profile"
+                                             loading="lazy">
+                                    </i>
+                                {% else %}
+                                    <i class="bi bi-person-circle px-1 tag-profile-photo" style="font-size: 1rem;"></i>
+                                {% endif %}
+                                {# icon to delete tag (usually hidden) #}
+                                <i class="bi bi-person-dash text-warning px-1 delete-tag" data-tag-id="{{ tag.id }}"
+                                   style="display: none">
+                                </i>
+
+                                {% if tag.user.first_name %}
+                                    {{ tag.user.first_name }}
+                                {% else %}
+                                    {{ tag.user.username }}
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {# tag user button #}
+                {% if "is_moderator" in archive_perms %}
+                    {% if record.type == 'Image' %}
+                        <div class="col-4 mx-1">
+                            <div class="d-flex">
+                                <i id="drawButton" class="bi bi-person-fill-add btn btn-sm px-1 py-0 text-success"
+                                   style="font-size: 1rem;">
+                                </i>
+
+                                <i id="remove-user-icon"
+                                   class="bi bi-person-fill-dash btn btn-sm px-1 py-0 text-warning"
+                                   title="{% trans 'Remove user' %}"
+                                   style="font-size: 1rem;">
+                                </i>
+
+
+                            </div>
+                        </div>
+
+
+                    {% else %}  <!-- record is not an image -->
+                        <div class="col-4 mx-1" id="CreateTagFormContainer">
+                            <div class="d-flex">
+                                <div class="dropdown">
+                                    <i class="bi bi-person-fill-add btn btn-sm px-1 py-0 text-success"
+                                       id="CreateTagDropdowm"
+                                       data-bs-toggle="dropdown"
+                                       aria-expanded="false"
+                                       type="button"
+                                       style="font-size: 1rem;">
+                                    </i>
+
+
+                                    <i id="remove-user-icon"
+                                       class="bi bi-person-fill-dash btn btn-sm px-1 py-0 text-warning"
+                                       title="{% trans 'Remove user' %}"
+                                       style="font-size: 1rem;">
+                                    </i>
+
+                                    <div class="dropdown-menu">
+                                        <div class="m-1">
+                                            {{ tag_form.user }}
+                                        </div>
+                                        <button class="btn btn-sm btn-primary m-1"
+                                                id="create-tag-form-submit"
+                                                type="submit"
+                                                form="create-tag-form">
+                                            {% trans "Submit" %}
+                                        </button>
+                                    </div>
+                                </div>  <!-- end dropdown -->
+
+                            </div>
+                        </div>
+                    {% endif %}  <!-- end record is not an image -->
+
+
+                {% endif %}
+            </div>  <!-- end row -->
+
+        </div>  <!-- end col -->
+    </div>  <!-- end row -->
+
+
+    {# metadata #}
+    <div class=" row form-group mx-0 py-1" title="{% trans "When was this taken?" %}">
+        {{ record_form.date_created.errors }}
+        <div class="col-md-2"><i class="bi bi-calendar-event"></i></div>
+        <div class="col-md-10">
+            {% if "is_moderator" in archive_perms or "change_record" in record_perms %}
+                {{ record_form.date_created }}
+            {% else %}
+                {% if record.date_created %}
+                    {{ record.date_created }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row form-group mx-0 py-1" title="{% trans "Where was this taken?" %}">
+        {{ location_form.name.errors }}
+        {{ location_form.state.errors }}
+        {{ location_form.country.errors }}
+        <div class="col-md-2"><i class="bi bi-geo-alt"></i></div>
+        <div class="col-md-10">
+            {% if "is_moderator" in archive_perms or "change_record" in record_perms %}
+                <div class="py-1">
+                    {{ location_form.name }}
+                </div>
+                <div class="py-1">
+                    {{ location_form.state }}
+                </div>
+                <div class="py-1">
+                    {{ location_form.country }}
+                </div>
+            {% else %}
+                {% if record.location %}
+                    {% if record.location.name %}
+                        <div class="py-1">
+                            {{ record.location.name }}
+                        </div>
+                    {% endif %}
+                    {% if record.location.state %}
+                        <div class="py-1">
+                            {{ record.location.state }}
+                        </div>
+                    {% endif %}
+                    {% if record.location.country %}
+                        <div class="py-1">
+                            {{ record.location.country }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row form-group mx-0 py-1" title="{% trans "Description" %}">
+        {{ record_form.user_caption.errors }}
+        <div class="col-md-2"><i class="bi bi-card-text"></i></div>
+        <div class="col-md-10">
+            {% if "is_moderator" in archive_perms or "change_record" in record_perms %}
+                {{ record_form.user_caption }}
+            {% else %}
+                {% if record.user_caption %}
+                    {{ record.user_caption }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if "is_moderator" in archive_perms or "change_record" in record_perms %}
+        <div class="row mx-0 py-1 justify-content-end">
+            <div class="col-md-10">
+                <input type="hidden" name="action" value="save">
+                <button type="submit" form="record-form" style="width: 100%"
+                        class="btn btn-primary btn-sm" title="Save changes">{% trans "Save" %}</button>
+            </div>
+        </div>
+    {% endif %}
+
+</form>
+

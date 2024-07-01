@@ -1,0 +1,26 @@
+{#{% load crispy_forms_tags %}#}
+{% load i18n %}
+{% load static %}
+
+
+<form action="{% url 'arch_app:upload_record' archive.name archive.id %}"
+      method="post" enctype="multipart/form-data"
+      id="upload-form-{{ archive.id }}">
+    {% csrf_token %}
+
+    <div class="p-2 container">
+        <div>
+            {{ upload_form.files.errors }}
+            {{ upload_form.files }}
+        </div>
+
+        <button type="submit"
+                class="btn btn-sm btn-primary my-1"
+                onclick="window.arch.showSpinner('upload-form-{{ archive.id }}');"
+                title="{% trans "Upload" %}">
+            {% trans "Upload" %}
+        </button>
+    </div>
+
+</form>
+

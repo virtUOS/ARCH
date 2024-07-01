@@ -1,0 +1,12 @@
+{% extends "arch_app/archive.html" %}
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+
+
+{% block archive_settings %}
+
+    {% get_archive_form archive as archive_form %}
+    {% include "../forms/archive_form.html" %}
+
+{% endblock %}

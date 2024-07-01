@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<form method="post" id="comment-form">
+    {% csrf_token %}
+    <div class="row py-0 justify-content-start">
+        <div class="col-10 py-0 pr-0">
+            {{ comment_form.text.errors }}
+            {{ comment_form.text }}
+        </div>
+        <div class="col-2 px-1 align-bottom">
+            <button type="submit" class="btn btn-primary btn-sm">
+                <bi class="bi bi-send-fill"></bi>
+            </button>
+        </div>
+    </div>
+    <input type="hidden" name="action" value="comment">
+</form>

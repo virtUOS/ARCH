@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load static %}
+
+
+<div class="row justify-content-around">
+
+    {% for record in record_list %}
+
+        {% if forloop.counter0|divisibleby:4 %}
+            {% if forloop.counter0 == 0 %}
+                <div class="row">
+            {% else %}
+                </div>
+                <div class="row">
+            {% endif %}
+        {% endif %}
+
+        <div class="col-md-3 py-sm-5 py-md-2 m-0 p-2">
+
+            {% include "./record/record_item.html" %}
+
+        </div>
+
+    {% endfor %}
+    </div>
+</div>

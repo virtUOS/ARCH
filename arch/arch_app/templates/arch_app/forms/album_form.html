@@ -1,0 +1,129 @@
+{% load i18n %}
+{% load guardian_tags %}
+
+
+<form method="POST"
+      action="{% url 'arch_app:update_album' album.id %}"
+      enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% get_obj_perms user for album.archive as "archive_perms" %}
+
+    <div class="row px-3">
+        {#        Title#}
+        <div class="col-auto">
+
+            {{ album_form.title.errors }}
+            {% if "is_moderator" in archive_perms %}
+                <h1 class="text-primary"> {{ album_form.title }}</h1>
+            {% else %}
+                <h1 class="text-primary"> {{ album.title }}</h1>
+            {% endif %}
+
+        </div>
+
+    </div>
+    {# Ends row title #}
+
+    <div class="row px-4 justify-content-start small">
+
+        <!-- Timespan -->
+        {% with start_date=album.get_start_date %}
+            {% with end_date=album.get_end_date %}
+                {% if start_date %}
+                    <div class="col-auto" title="{% trans 'Time span covered by this Album' %}">
+                        {{ start_date }}
+                        {% if end_date and start_date != end_date %}
+                            - {{ end_date }}
+                        {% endif %}
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-dot"></i>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endwith %}
+        <!-- end Timespan -->
+
+        <!-- number of record -->
+        <div class="col-auto" title="{% trans 'Number of entries in this Album' %}">
+            {{ album.get_number_of_records }} Item{{ album.get_number_of_records|pluralize }}
+        </div>
+
+        {# Album creator #}
+        {% if album.creator %}
+            <div class="col-auto">
+                <i class="bi bi-dot"></i>
+            </div>
+            <div class="col-auto" title="{% trans 'Author of the Album' %}">
+                {% if album.creator.first_name %}
+                    {{ album.creator.first_name }}
+                    {% if album.creator.last_name %}{{ album.creator.last_name }}{% endif %}
+                {% else %}
+                    {{ album.creator.username }}
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+
+    {#            Album description#}
+    <div class="row form-group px-3 my-md-4" title={% trans "Album description" %}>
+
+        <div class="col-12 px-4">
+            {% if "is_moderator" in archive_perms %}
+                {{ album_form.description.errors }}
+                {{ album_form.description }}
+            {% else %}
+                {% if album.description %}
+                    <div>{{ album.description }}</div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="col-12 my-md-3 my-sm-1">
+
+            <div class="d-flex justify-content-end" id="submit-cancel-album-edit">
+                <button type="submit" class="btn btn-outline-success" id="submit-description-title"
+                        style="display: none;"> Save
+                </button>
+                <button class="btn btn-outline-danger" id="cancel-description-title" style="display: none;">
+                    Cancel
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const titleField = document.querySelector('.edit-album-title');
+        const descriptionField = document.querySelector('.edit-album-description');
+        const SubmitButton = document.querySelector('#submit-description-title');
+        const CancelButton = document.querySelector('#cancel-description-title');
+
+
+        titleField.addEventListener('click', function () {
+            SubmitButton.style.display = '';
+            CancelButton.style.display = '';
+        });
+
+        descriptionField.addEventListener('click', function () {
+            SubmitButton.style.display = '';
+            CancelButton.style.display = '';
+        });
+
+        CancelButton.addEventListener('click', function () {
+            // prevent form from submitting
+            event.preventDefault();
+            location.reload();
+        });
+
+    });
+
+
+</script>

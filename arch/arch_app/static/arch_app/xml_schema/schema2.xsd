@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
+    <xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="https://www.dublincore.org/schemas/xmls/qdc/dc.xsd" />
+    <xs:import namespace="http://purl.org/dc/terms/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/dcterms.xsd" />
+
+    <xs:element name="metadata" type="metadataType"/>
+
+    <xs:complexType name="metadataType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="dcterms:termsGroup" xmlns:dcterms="http://purl.org/dc/terms/"/>
+        </xs:choice>
+    </xs:complexType>
+
+</xs:schema>

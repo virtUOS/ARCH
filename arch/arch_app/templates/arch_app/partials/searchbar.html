@@ -1,0 +1,136 @@
+{% load i18n %}
+{% load arch_tags %}
+{% load static %}
+
+
+{% if populated_form %}
+
+{% else %}
+    {% get_search_form as search_form %}
+{% endif %}
+
+
+<!-- This script got from frontendfreecode.com -->
+
+
+<form class="form-inline" id="search_form_nav" role="search" action="{% url 'arch_app:search' %}" method="POST">
+    {% csrf_token %}
+    <div class="input-group" style="max-width: 460px;">
+
+        <div class="pr-1" style="max-width: 40vw;">
+            {{ search_form.search_query }}
+        </div>
+
+        <div class="input-group-btn">
+            <button type="submit" class="btn btn-search btn-primary">
+                <i class="bi bi-search"></i>
+                <span class="label-icon d-none d-md-inline-block-customized ">{% trans "Search" %}</span>
+            </button>
+
+
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                    id="dropdownMenuButtonSearch">
+                <i class="bi bi-filter"></i>
+                <span class="d-none d-md-inline-block-customized">{% trans "Filter" %}</span>
+                <span class="caret"></span>
+            </button>
+
+
+            <div class="dropdown-menu pull-right my-2" role="menu"
+                 aria-labelledby="dropdownMenuButtonSearch">
+
+                <div class="row">
+
+
+                    <div class="col-md-12 py-2 ">
+
+
+                        <div class="row mb-3 px-2">
+
+
+                            <div class="col-6 ">
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Location" %}</span>
+                                    </div>
+                                    {{ search_form.location }}
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">User</span>
+                                    </div>
+                                    {{ search_form.depicted_users }}
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                        <div id="autocomplete-container" style="position: relative; z-index: 9999;"></div>
+
+
+                        <div class="row mb-3 px-2">
+
+                            <div class="col-6 ">
+
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Start" %}</span>
+                                    </div>
+                                    {{ search_form.start_date }}
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-6">
+
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "End" %}</span>
+                                    </div>
+                                    {{ search_form.end_date }}
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="row mb-3 px-2">
+
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">{% trans "Type" %}</span>
+                                    </div>
+                                    {{ search_form.media_type }}
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <button class="btn btn-primary btn-block" type="submit">{% trans "Search" %}</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    window.arch.initSearch();
+</script>

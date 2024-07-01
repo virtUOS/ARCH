@@ -1,0 +1,68 @@
+{#Adapted from https://www.bootdey.com/snippets/view/account-settings#}
+
+{% extends "arch_app/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+    {{ user.username }}
+{% endblock %}
+
+{% block navbar %}
+    {% include "arch_app/partials/navbar.html" %}
+{% endblock %}
+
+
+{% block content %}
+
+    {% include "./partials/spinner.html" %}
+
+    <div class="container-fluid flex-grow-1">
+
+        <h4>{% trans "Account Settings" %}</h4>
+
+        <div class="card overflow-hidden">
+
+            <div class="row no-gutters ">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'profile' %} active {% endif %}" data-toggle="list"
+                           href="{% url 'arch_app:profile' %}">{%  trans "Profile" %}</a>
+                        <a class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'change_password' %} active {% endif %}" data-toggle="list"
+                           href="{% url 'arch_app:change_password' %}">{% trans "Change Password" %}</a>
+                        <a class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'privacy_settings' %} active {% endif %}" data-toggle="list"
+                           href="{% url 'arch_app:privacy_settings' %}">{% trans "Privacy" %}</a>
+                    </div>
+                </div>
+
+
+                <div class="col-md-7 mx-auto">
+
+                    <div class="tab-content">
+
+                        {% block account_settings %}
+
+                        {% endblock %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+
+
+
+

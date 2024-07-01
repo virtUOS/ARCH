@@ -1,0 +1,9 @@
+{% load arch_tags %}
+{%load crispy_forms_tags %}
+
+
+<form action="{% url 'arch_app:membership_date' m.id  %}" method="post" id="membership-date-form-{{ m.id }}">
+    {% csrf_token %}
+    {{ membership_date_form|crispy }}
+
+</form>

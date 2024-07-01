@@ -1,0 +1,15 @@
+{% load i18n %}
+
+
+<form action="{% url 'arch_app:create_album' archive.name|slugify archive.id %}"
+      method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="text-center">
+        <input name="title" type="text" placeholder="title" value="" />
+    </div>
+
+    <input type="hidden" name="archive" value="{{ archive.id }}">
+    <input type="hidden" name="action" value="create">
+
+</form>

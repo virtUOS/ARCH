@@ -1,0 +1,67 @@
+{% extends "arch_app/archive.html" %}
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+{% block archive_settings %}
+
+    {# Albums #}
+    <div class="row justify-content-within">
+        <div class="col-1"></div>
+        <div class="col">
+            <h2 class="text-center text-primary">{% trans "Albums" %}</h2>
+        </div>
+
+        <div class="col-md-1 col-sm-5">
+            {#     Button to create new Album #}
+            {#     Only show if user is moderator #}
+            {% get_obj_perms user for archive as "archive_perms" %}
+            {% if "is_moderator" in archive_perms %}
+
+                <div class="dropdown">
+
+                    <a class="btn btn-outline-primary toggle" title="{% trans "Options" %}" href="#"
+                       id="NewAlbumDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-folder-plus"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end"
+                         aria-labelledby="NewAlbumDropdown">
+                        <div class="container p-1">
+                            <h5 class="text-primary">{% trans "New Album" %}</h5>
+                            {% include "../forms/create_album_form.html" %}
+                        </div>
+                    </div> <!-- end dropdown-menu -->
+
+                </div> <!-- end dropdown -->
+            {% endif %}
+            {#     end Button to create new Album #}
+        </div>
+
+
+        {#     album list#}
+        <div class="row justify-content-around">
+            {% for album in album_list %}
+
+                {% if forloop.counter0|divisibleby:2 %}
+                    {% if forloop.counter0 == 0 %}
+                        <div class="row">
+                            {% else %}
+                        </div>
+                        <div class="row">
+                    {% endif %}
+                {% endif %}
+
+                <div class="col-md-6 py-sm-5 py-md-2 m-0 p-2">
+                    {% include "./album_item.html" %}
+                </div>
+
+            {% endfor %}
+            </div>
+
+
+            {% include "./pagination.html" %}
+
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% load arch_tags %}
+
+{% block footer %}
+
+    {% get_contact_email as contact_email %}
+
+    <footer class="footer small" style="min-height: 3rem;">
+        <div class="d-flex justify-content-between px-3">
+            <div>
+                <a href="https://archproject.stir.ac.uk/">
+                    ARCH - Archiving Residential Children’s Homes in Scotland and Germany
+                </a>
+            </div>
+            <i class="bi bi-dot"></i>
+            <div>
+                developed by the <a
+                    href="https://www.paedagogik.uni-osnabrueck.de/abteilungen/allgemeine_erziehungswissenschaft_sozialpaedagogik_und_fruehe_bildung/erziehungswissenschaft_mit_sozialpaedagogischem_forschungsschwerpunkt_florian_esser/forschungsprojekte_research_projects/arch.html">Universität
+                Osnabrück</a> and the <a href="https://www.stir.ac.uk/">University of Stirling</a>
+            </div>
+            <i class="bi bi-dot"></i>
+            <div>
+                funded by the <a href="https://www.dfg.de/">DFG</a> and <a href="https://www.ukri.org/councils/ahrc/">AHRC</a>
+            </div>
+            <i class="bi bi-dot"></i>
+
+            {% if contact_email %}
+
+            <div>
+                contact <a href="mailto:{{ contact_email }}">
+                    {{ contact_email }}
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+    </footer>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+Django==4.0.4
+django-mathfilters==1.0.0
+django-guardian==2.4.0
+django-q2==1.6.1
+django-bootstrap-v5==1.0.11
+django-crispy-forms==1.14.0
+crispy-bootstrap5==0.7
+xmlschema==1.11.1
+python-magic==0.4.27
+exifread==3.0.0
+pillow==9.0.1
+numpy==1.23.3
+reverse_geocoder==1.5.1

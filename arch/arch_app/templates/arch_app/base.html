@@ -1,0 +1,76 @@
+{% load bootstrap5 %}
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+
+    {# favicon (icon of website, shown in the tab by the browser) #}
+    <link rel="shortcut icon" type="image/png" href="{% static 'arch_app/icons/house-door.svg' %}"/>
+    <script src="{% static 'arch_app/build/main-bundle.js' %}"></script>
+
+    <title>
+        {% block title %}
+            ARCH
+        {% endblock %}
+    </title>
+
+</head>
+
+<body>
+
+<div class="container-fluid" style="height: 100vh">
+
+
+    <div class="row">
+        <div class="col-12">
+            {# navbar #}
+            {% block navbar %}{% endblock %}
+        </div>
+    </div> <!-- row -->
+
+    <div class="row" style="min-height: 100vh;">
+
+        {# sidebar #}
+        {% block sidebar %}
+            <div class="col-md-1"></div>
+        {% endblock %}
+
+        <div class="col">
+            {# display messages #}
+            {% bootstrap_messages %}
+            <main>
+                {# the block 'content' will be filled by the individual page templates #}
+                <div class="rounded">
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+
+        {# right side content #}
+        <div class="col-md-1">
+            {% block content_right %}{% endblock %}
+        </div>
+
+    </div>
+
+    <div class="row pt-5">
+        <div class="col-12">
+            {# footer #}
+            {% include "./partials/footer.html" %}
+        </div>
+    </div>
+
+
+</div>
+
+{% block js %}
+
+{% endblock %}
+
+</body>
+</html>

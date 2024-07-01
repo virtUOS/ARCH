@@ -1,0 +1,85 @@
+{% extends "./base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load arch_tags %}
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% if user.is_authenticated %}
+        {% include "./partials/sidebar.html" %}
+    {% else %}
+        <div class="col-md-1"></div>
+    {% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+    {% include "./partials/spinner.html" %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-10 py-4 text-center">
+
+            {% if user.is_authenticated %}
+                <div class="row justify-content-center">
+                    {% if user.archives.all %}
+                        {% for archive in user.archives.all.distinct %}
+                            <div class="col-md-4 col-sm-8 p-2" style="text-align: center">
+
+                                <div class="container border rounded m-1 p-1">
+
+                                    <a href="{% url 'arch_app:archive' archive.name|slugify archive.id %}">
+                                        {% if archive.profile_picture %}
+                                            <i class="bi" style="font-size: 8rem">
+                                                <img class="img-fluid rounded"
+                                                     style="height: 8rem; width: 100%; object-fit: cover;"
+                                                     src="{{ archive.profile_picture.url }}"
+                                                     alt="{% trans "Group profile picture" %}" loading="lazy">
+                                            </i>
+                                        {% else %}
+                                            <i class="bi bi-people text-dark" style="font-size: 8rem; width: 100%;"></i>
+                                        {% endif %}
+                                    </a>
+                                    <div style="text-align: center">{{ archive.name }}</div>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        <p>{% trans "Sorry, you are not a member of any group yet." %}</p>
+                    {% endif %}
+                </div>
+                {#                Feedback form#}
+                <div class="row">
+
+                <p class="lead my-md-3 py-md-3"> {% trans 'Send us' %}
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFeedback" aria-expanded="false" aria-controls="collapseFeedback">
+                        {% trans 'Feedback' %}
+                    </button>
+                </p>
+                <div class="collapse" id="collapseFeedback">
+
+                    {% get_feedback_form as feed_back_form %}
+                    {% include "./forms/feedback_form.html" %}
+
+
+                </div>
+
+
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'login' %}?next={{ request.path }}">Log in</a>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

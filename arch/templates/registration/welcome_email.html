@@ -1,0 +1,15 @@
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% trans "Welcome" %}</title>
+</head>
+<body>
+    <h2>{% trans "Welcome" %} {{ user.username }}!</h2>
+    <p>{% trans "Your account was successfully activated! " %}</p>
+    <p>{% trans "Please remember to change your generated password. " %}</p>
+    <p>{% trans "Best regards" %}</p>
+</body>
+</html>

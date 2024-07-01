@@ -1,0 +1,223 @@
+{% extends "arch_app/archive.html" %}
+{% load i18n %}
+{% load static %}
+{% load arch_tags %}
+{% load guardian_tags %}
+
+
+{% block navbar %}
+    {% include "./partials/navbar.html" %}
+{% endblock %}
+{% include "./partials/spinner.html" %}
+
+{% block title %}
+    {{ archive.name }} {% trans "Members" %}
+{% endblock %}
+
+{% block archive_settings %}
+
+
+    {#    Current members#}
+    <div class="row justify-content-within bg-light-sm">
+        <div class="col-1"></div>
+        <div class="col">
+            <h2 class="text-center text-primary">{% trans "Members" %}</h2>
+        </div>
+
+        {#        Add a member#}
+
+        <div class="col-md-1 col-sm-5">
+
+            {# check permission #}
+            {% get_obj_perms user for archive as "archive_perms" %}
+            {% if "is_moderator" in archive_perms %}
+                <div class="dropdown">
+                    <a class="toggle btn btn-outline-primary" title="{% trans "New Member" %}" href="#"
+                       id="NewMemberDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-plus"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end"
+                         aria-labelledby="NewMemberDropdown"
+                         style="min-width: 15rem;">
+                        <div class="container p-2">
+                            <h5>
+                                {% trans "Add a new Member" %}
+                            </h5>
+                            <hr>
+                            {% get_create_add_member_form as form %}
+                            {% include "./forms/create_add_member_form.html" %}
+                        </div>
+                    </div>
+                </div> <!-- dropdown -->
+            {% endif %}
+
+        </div> <!-- col -->
+    </div> <!-- row p-4 -->
+
+    <div class="col-md-12 p-3" title="{% trans "group members" %}">
+
+        <div class="row justify-content-start py-1">
+            {% for member in archive.get_active_members %}
+                {% if member.visible %}
+                    <div class="col-md-4 col-sm-6">
+                        <div class="row justify-content-start">
+                            <div class="col-auto mx-0">
+                                {% if member.profile_picture %}
+                                    <i class="bi" style="font-size: 3rem;">
+                                        <img class="rounded-circle border"
+                                             style="height: 3rem; width: 3rem; object-fit: cover;"
+                                             src="{{ member.profile_picture.url }}"
+                                             alt="User Profile"
+                                             loading="lazy">
+                                    </i>
+                                {% else %}
+                                    <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+                                {% endif %}
+                            </div>
+                            <div class="col-auto mx-0 my-auto">
+                                {% if member.first_name %}
+                                    <div>{{ member.first_name }}</div>
+                                {% else %}
+                                    <div>{{ member.username }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+
+    <div class="row justify-content-start py-2">
+        <div class="text-center">
+            <h4>{% trans "History" %}</h4>
+        </div>
+
+        <div class="col-md-12">
+
+
+            <div class="row">
+                <div class="col overflow-auto" style="max-height: 50vh;">
+
+                    {% for m in membership_list %}
+                        {% if m.user.visible %}
+                            <div class="row justify-content-center">
+                                <div class="col-1 my-auto">
+                                    {% if m.user.profile_picture %}
+                                        <i class="bi" style="font-size: 2rem;">
+                                            <img class="rounded-circle border"
+                                                 style="height: 2rem; width: 2rem; object-fit: cover;"
+                                                 src="{{ m.user.profile_picture.url }}"
+                                                 alt="User Profile"
+                                                 loading="lazy">
+                                        </i>
+                                    {% else %}
+                                        <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="col-3 my-auto">
+                                    {% if m.user.first_name %}
+                                        {{ m.user.first_name }}
+                                    {% else %}
+                                        {{ m.user.username }}
+                                    {% endif %}
+                                </div>
+                                {#                            Membership dates#}
+
+
+                                <div class="col my-auto small">
+
+                                    {% if "is_moderator" in archive_perms %}
+                                        <div type="button"
+                                             data-bs-toggle="modal"
+                                             data-bs-target="#date-membership-{{ m.id }}"
+                                             title="{% trans "Update Membership Dates" %}"
+                                        >
+                                            {{ m.start_date }}
+                                            {% if m.end_date %}
+                                                - {{ m.end_date }}
+                                            {% else %}
+                                                - {% trans "present" %}
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="date-membership-{{ m.id }}" tabindex="-1"
+                                             role="dialog"
+                                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            {% trans 'Update Membership of ' %}{{ m.user.username }}</h5>
+                                                        <button type="button" class="close" data-bs-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {#                                                    Form to change memebership's date#}
+                                                        {% get_membership_date_form m as membership_date_form %}
+
+                                                        <p class="">{% trans 'Update when the user joined or left the group' %}</p>
+                                                        {% include "./forms/membership_dates_form.html" %}
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">{% trans 'Cancel' %}
+                                                        </button>
+                                                        <button type="submit" form="membership-date-form-{{ m.id }}"
+                                                                class="btn btn-primary">{% trans 'Submit' %}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% else %}
+
+                                        <div>
+
+                                            {{ m.start_date }}
+                                            {% if m.end_date %}
+                                                - {{ m.end_date }}
+                                            {% else %}
+                                                - {% trans "present" %}
+                                            {% endif %}
+                                        </div>
+
+
+                                    {% endif %}
+                                </div>
+
+                                {#                            End Membership#}
+
+                                <div class="col my-auto small">
+                                    {{ m.user.email }}
+                                </div>
+                                {#                            <div class="col-1 my-auto">#}
+                                {# <a href="{% url 'arch_app:delete_membership' m.id %}">#}
+                                {#                                    <i class="bi bi-three-dots-vertical" style="font-size: 1rem;"></i>#}
+                                {#                                </a>#}
+                                {#                            </div>  <!-- col -->#}
+                            </div>  <!-- row -->
+                        {% endif %}
+                    {% endfor %}  <!-- membership_list -->
+
+                </div>  <!-- col -->
+            </div>  <!-- row -->
+
+        </div>  <!-- col -->
+    </div>  <!-- row -->
+
+
+{% endblock %}
+
+{% block js %}
+{#    <script src="{% static 'arch_app/js/preserve_toggle_state.js' %}"></script>#}
+{% endblock %}

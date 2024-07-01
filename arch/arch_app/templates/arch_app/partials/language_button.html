@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+    <form action="{% url 'arch_app:set_language' %}" method="post">
+        {% csrf_token %}
+
+        <select name="language" id="language" onchange="this.form.submit()">
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}
+                        selected="selected" {% endif %} >
+                    {{ language.name_local }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="hidden" id="origin_url" name="origin_url" value={{ request.path }}>
+
+        <img class="img-fluid"
+             src="{% static 'arch_app/img/flags/' %}{{ LANGUAGE_CODE }}.svg"
+             alt="flag-{{ LANGUAGE_CODE }}"
+             style="width:2em; height:2em;"
+        />
+
+    </form>

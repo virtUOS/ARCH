@@ -1,0 +1,14 @@
+{% load i18n %}
+
+
+<form method="POST"
+      action="{% url 'arch_app:update_record' %}"
+      enctype="multipart/form-data"
+      onchange="this.submit();">
+    {% csrf_token %}
+
+    {{ select_album_form.album.errors }}
+    {{ select_album_form.album }}
+
+    <input type="hidden" name="record_id" value="{{ record.id }}">
+</form>
