@@ -1,0 +1,15 @@
+# ignore any virtual environments
+.venv
+# ignore git files
+.git
+.gitignore
+# ignore any existing database files
+db.sqlite3
+# ignore any node_modules directories used by npm
+node_modules
+# ignore any existing media files
+arch/media
+# ignore any existing static files
+arch/arch_app/ai_models
+# ignore log files
+*.log

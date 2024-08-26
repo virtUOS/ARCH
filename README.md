@@ -56,7 +56,8 @@ An overview over the features of the application is presented in the following l
 
 ## Installation and Deployment
 
-See [here](docs/Deployment.md) for a guide on how to install and deploy the application. 
+- See [here](docs/Deployment.md) for a guide on how to **manually install** and deploy the application. 
+- To deploy the application using **Docker**, follow the instructions [here](docs/Docker.md).
 
 ## Development
 

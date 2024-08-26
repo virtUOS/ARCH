@@ -108,11 +108,11 @@ AUTHENTICATION_BACKENDS = (
 DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql',
-                 'NAME': 'arch_db',   # name of the database, replace with your database name
-                 'USER': 'db_admin',  # username to connect to the database
-                 'PASSWORD': 'arch',  # password to connect to the database
-                 'HOST': 'localhost',
-                 'PORT': '',
+                'NAME': 'arch_db',              # name of the database, replace with your database name
+                'USER': 'db_admin',             # username to connect to the database
+                'PASSWORD': 'password',         # password to connect to the database
+                'HOST': 'localhost',            # set to empty string for localhost (default) or 'db' for docker
+                'PORT': '',                     # set to empty string for default (5432)
                 'TEST': {
                     'NAME': 'arch_db_test',
                 },
@@ -147,7 +147,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-STATICFILES_DIRS = []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

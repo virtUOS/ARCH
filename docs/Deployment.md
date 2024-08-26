@@ -119,14 +119,6 @@ To activate the Face detection feature, follow the following instructions:
 sudo apt-get install postgresql postgresql-contrib
 ```
 
-Install psycopg2 
-
-**ToDo: Check if this is needed or can be in the requirements.txt**
-
-```
-sudo pip install psycopg2-binary
-```
-
 #### 2. Create a DB
 
 open the db shell, e.g. via `postgres psql` or `sudo -u postgres psql`. Create a DB and an admin user to allow access to the DB from the Django application.

@@ -140,10 +140,11 @@ arch/media/
 # exclude IDE files
 .idea/
 
-/arch/arch_app/modules/embeddings/image_captioning/*
 /arch/arch_app/static/arch_app/build/*
 # Mac
 .DS_Store
 
 /arch/arch_app/static/user_info/
 /node_modules/
+/arch/arch_app/ai_models/
+/arch/staticfiles/

@@ -1,0 +1,51 @@
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile_dev
+        command: python arch/manage.py runserver 0.0.0.0:8000
+        env_file:
+            - .env.dev
+        ports:
+            - "8000:8000"
+        volumes:
+            - media_volume:/app/arch/media
+        entrypoint: ["/app/entrypoint.dev.sh"]
+        healthcheck:
+            test: curl --fail http://localhost:8000/ || exit 1
+            interval: 20s
+            timeout: 5s
+            retries: 3
+        depends_on:
+            db:
+                condition: service_healthy
+    task_queue:
+        build:
+            context: .
+            dockerfile: Dockerfile_dev
+        command: python arch/manage.py qcluster
+        env_file:
+            - .env.dev
+        volumes:
+            - media_volume:/app/arch/media
+        depends_on:
+            web:
+                condition: service_healthy
+            db:
+                condition: service_healthy
+    db:
+        image: postgres:14
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        env_file:
+            - .env.db
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+            interval: 20s
+            timeout: 5s
+            retries: 3
+volumes:
+    media_volume:
+    postgres_data:
