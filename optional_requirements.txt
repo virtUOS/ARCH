@@ -1,6 +1,0 @@
-opencv-python-headless==4.8.0.74    # used for image processing and face detection
-sentence-transformers==3.0.1        # enables the use of ai-powered search via query and image embeddings
-requests==2.28.1                    # optional requirement used by sentence-transformers (and cvlib)
-django-debug-toolbar==3.7.0         # used for debugging during development
-django-extensions==3.1.5            # used for debugging during development
-pydot==2.0.0                        # used for generating UML diagrams
