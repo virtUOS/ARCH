@@ -5,11 +5,9 @@
 {% load arch_tags %}
 
 
-
 {% block navbar %}
     {% include "./partials/navbar.html" %}
 {% endblock %}
-
 
 {% block title %}{{ archive.name }}
 {% endblock %}
@@ -21,156 +19,62 @@
 
 <h5>{{ archive.name }}</h5>
 <div class="card">
-{#    {% if request.resolver_match.url_name == 'archive' %}#}
-{#        <h5 class="text-center text-primary"> Home</h5>#}
-{##}
-{##}
-{#    {% endif %}#}
-{##}
-{#    {% if request.resolver_match.url_name == 'members' %}#}
-{#    <h2 class="text-center text-primary">Members</h2>#}
-{##}
-{#  {% endif %}#}
-{##}
-{#    {% if request.resolver_match.url_name == 'album_list' %}#}
-{#        <h5 class="text-center text-primary">Albums</h5>#}
-{#{% endif %}#}
-
-
     <div class="row no-gutters ">
 
         <div class="col-md-3 col-sm-12 pt-0">
-
             <div class="card-header border" style="height: 100%;">
+            
                 <ul class="nav nav-pills card-pills flex-md-column ">
+                
                     <li class="nav-item account-settings-links">
-                        <a class="nav-link list-group-item-action   {% if request.resolver_match.url_name == 'archive' %} active {% else %} text-primary {% endif %}"
+                        <a class="nav-link list-group-item-action 
+                            {% if request.resolver_match.url_name == 'archive' %}active 
+                            {% else %} text-primary{% endif %}"
                            data-toggle="list"
                            href="{% url 'arch_app:archive' archive.name archive.pk %}">
                             {% trans "Home" %}
                         </a>
-
                     </li>
+                
                     <li class="nav-item">
-                        <a class="nav-link list-group-item-action  {% if request.resolver_match.url_name == 'members' %} active {% else %} text-primary {% endif %}"
+                        <a class="nav-link list-group-item-action {% if request.resolver_match.url_name == 'members' %} active {% else %} text-primary {% endif %}"
                            data-toggle="list"
                            href="{% url 'arch_app:members' archive.name archive.id %}">
                             {% trans "Members" %}
                         </a>
                     </li>
 
-
                     <li class="nav-item">
-
                         <a class="nav-link list-group-item-action  {% if request.resolver_match.url_name == 'album_list' %} active {% else %} text-primary {% endif %}"
                            data-toggle="list"
                            href="{% url 'arch_app:album_list' archive.pk %}">
                             {% trans "Albums" %}
                         </a>
-
-
                     </li>
-
-
+                
                     <li class="nav-item">
                        <a class="nav-link list-group-item-action  text-primary"
                            href="{% url 'arch_app:album' archive.inbox.id %}">
                              <i class="bi bi-mailbox pr-2"></i>{% trans "Inbox" %}
                         </a>
-
                     </li>
-
-
+                
                 </ul>
 
-
             </div>
-
-
         </div>
 
         <div class="col-md-7 col-sm-12 mx-auto">
-
             <div class="card-body">
-
                 <div class=" custom-card-archive tab-content my-sm-4 py-sm-3">
-
                     {% block archive_settings %}
-
                     {% endblock %}
-
                 </div>
             </div>
-
-
         </div>
-
-
+    
     </div>
 </div>
-
-
-{##}
-{#    <div class="container-fluid flex-grow-1">#}
-{##}
-{#        <h4>{{ archive.name }}</h4>#}
-{##}
-{##}
-{#        <div class="card overflow-hidden">#}
-{##}
-{#            <div class="row no-gutters ">#}
-{#                <div class="col-md-3 pt-0">#}
-{#                    <div class="list-group list-group-flush account-settings-links">#}
-{#                        <a class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'archive' %} active {% endif %}"#}
-{#                           data-toggle="list"#}
-{#                           href="{% url 'arch_app:archive' archive.name archive.pk %}">#}
-{#                            {% trans "Home" %}#}
-{#                        </a>#}
-{##}
-{#                        <a class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'members' %} active {% endif %}"#}
-{#                           data-toggle="list"#}
-{#                           href="{% url 'arch_app:members' archive.name archive.id %}">#}
-{#                            {% trans "Members" %}#}
-{#                        </a>#}
-{##}
-{#                        <a class="list-group-item list-group-item-action settings-link {% if request.resolver_match.url_name == 'album_list' %} active {% endif %}"#}
-{#                           data-toggle="list"#}
-{#                           href="{% url 'arch_app:album_list' archive.pk %}">#}
-{#                            {% trans "Albums" %}#}
-{#                        </a>#}
-{##}
-{#                        <a class="list-group-item"#}
-{#                           href="{% url 'arch_app:album' archive.inbox.id %}">#}
-{#                            {% trans "Inbox" %}#}
-{#                        </a>#}
-{##}
-{#                    </div>#}
-{##}
-{#                </div>#}
-{##}
-{##}
-{#                <div class="col-md-7 mx-auto">#}
-{##}
-{#                    <div class=" custom-card-archive tab-content my-sm-4 py-sm-3">#}
-{##}
-{##}
-{#                        {% block archive_settings %}#}
-{##}
-{#                        {% endblock %}#}
-{##}
-{#                    </div>#}
-{##}
-{#                </div>#}
-{##}
-{##}
-{#            </div>#}
-{##}
-{##}
-{#        </div>#}
-{##}
-{##}
-{#    </div>#}
-
 
 {% endblock %}
 

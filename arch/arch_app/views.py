@@ -2,9 +2,8 @@ from urllib.parse import urlencode
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.views import LoginView
-from django.core.files.base import ContentFile
 from django.db.models.functions import Trunc
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Case, When, Q, Count
 from django.db.utils import IntegrityError, DataError
@@ -24,6 +23,7 @@ from django.http import JsonResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from itertools import chain
+
 from .forms import *
 from .utils import send_email
 from PIL import Image
@@ -36,11 +36,9 @@ from datetime import datetime
 import logging
 from django.conf import settings
 
-from django_q.tasks import async_task, result
+from django_q.tasks import async_task
 from .tasks import create_tagboxes_and_save, generate_preview_and_save, generate_image_embedding_and_save
 
-if settings.ACTIVATE_FACE_DETECTION:
-    from .modules.computer_vision.face_detection import detect_faces
 
 console_logger = logging.getLogger('ARCH_console_logger')
 file_logger = logging.getLogger('ARCH_file_logger')
@@ -63,6 +61,11 @@ class IndexView(generic.TemplateView):
 
 
 class CustomLoginView(LoginView):
+    """
+    Login view
+    handles data restoration for hidden users (sets visible to True and shows comments, tags, blurred images)
+    tracks the login of the user.
+    """
 
     def form_valid(self, form):
         user = form.get_user()
@@ -92,6 +95,9 @@ class CustomLoginView(LoginView):
 
 
 class ChangePasswordView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    """
+    View for changing the password of a user.
+    """
     template_name = './arch_app/forms/change_password.html'
     form_class = PasswordChangeForm
     success_url = reverse_lazy('login')
@@ -186,8 +192,11 @@ class CreateAddMemberView(LoginRequiredMixin, generic.TemplateView):
         return html_message
 
     def post(self, request, *args, **kwargs):
+        """
+        Post method for creating a new user or adding an existing user to an archive.
+        checks if the user has permission to add members to the archive and handles the form submission.
+        """
 
-        # check permissions using django-guardian
         if not request.user.has_perm('is_moderator', Archive.objects.get(id=request.POST['archive'])):
             messages.error(request, _('You do not have permission to add members to this archive.'))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -243,12 +252,9 @@ class CreateAddMemberView(LoginRequiredMixin, generic.TemplateView):
                 else:
                     messages.error(request,
                                    _('An error occurred while sending the email. Please Contact the Administrator.'))
-
-            # redirect where the user came from
             return redirect(request.META.get('HTTP_REFERER'))
 
         else:  # form is not valid
-            # redirect where the user came from
             return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -364,44 +370,32 @@ class FileUploadView(LoginRequiredMixin, FormMixin, generic.TemplateView):
         return super(FileUploadView, self).form_invalid(form)
 
 
-class ArchiveDetailView(LoginRequiredMixin, generic.ListView):
+class ArchiveDetailView(LoginRequiredMixin, generic.DetailView):
     """
     View for displaying the details of an archive.
     """
-    model = Album
+    model = Archive
     template_name = 'arch_app/partials/archive_home.html'
-    paginate_by = PAGINATE_BY
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        archive = Archive.objects.get(id=self.kwargs['pk'])
-        context['archive'] = archive
-        return context
-
-    def get_queryset(self):
-        """ Return all albums of the archive without the inbox. """
-        archive = Archive.objects.get(id=self.kwargs['pk'])
-        return Album.objects.filter(archive=archive, is_inbox=False).order_by("-date_created")
 
     def get(self, request, *args, **kwargs):
-        # check if user is member of this archive
+        """ Get method for the archive detail view,
+        checks if user has permission to view the archive and tracks the access to the archive
+        """
         archive = Archive.objects.get(id=self.kwargs['pk'])
         if not request.user.has_perm('view_archive', archive):
             messages.error(request, _('You do not have permission to view this page.'))
-            # redirect to where the user came from
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        # track access to archive
         Tracker.objects.create_from_request(request=self.request, content_object=archive, user=request.user)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # try to get the archive or 404
+        """ Post method for the archive detail view,
+        checks if user is a moderator and handles the form submission for the archive form
+        """
         archive = get_object_or_404(Archive, id=self.kwargs['pk'])
-        # check if user is moderator
         if not self.request.user.has_perm('is_moderator', archive):
             messages.error(request, _("You are not allowed to apply these changes."))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
         archive_form = ArchiveForm(request.POST, request.FILES, instance=archive)
         if archive_form.is_valid():
             archive_form.save()
@@ -427,7 +421,6 @@ class MembersViews(LoginRequiredMixin, generic.ListView):
         # check if user has is_moderator permission in this archive
         if self.request.user.has_perm('is_moderator', archive):
             # return all members of this archive
-
             return Membership.objects.filter(archive=archive).order_by("-start_date")
         else:
             all_memberships = Membership.objects.filter(archive=self.kwargs['pk'])
@@ -443,29 +436,16 @@ class MembersViews(LoginRequiredMixin, generic.ListView):
             return Membership.objects.filter(archive=archive).order_by("-start_date")
 
     def get(self, request, *args, **kwargs):
-        # check if user is member of this archive
+        """
+        Get method for the members view.
+        Checks if the user has permission to view the members of the archive.
+        """
         archive = Archive.objects.get(id=self.kwargs['pk'])
         if not request.user.has_perm('view_archive', archive):
             messages.error(request, _('You do not have permission to view this page.'))
-            # redirect to where the user came from
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         return super().get(request, *args, **kwargs)
-
-
-@login_required()
-def update_membership(request, pk):
-    """
-    View for updating the membership of a user in an archive
-    """
-    pass
-    # # POST
-    # if request.method == 'POST':
-    #     # check if user has is_moderator permission in this residential group
-    #     residentila_group = Archive.objects.get(id=pk)
-    #     if not request.user.has_perm('is_moderator', archive):
-    #
-    #     membership_form = MembershipForm(request.POST)
 
 
 class ProfileView(LoginRequiredMixin, generic.TemplateView):
@@ -527,50 +507,45 @@ class RecordUpdateView(LoginRequiredMixin, View):
     """
 
     def post(self, request, *args, **kwargs):
+        """
+        Post method for updating the album of a record object.
+        checks if the user has permission to update the record and updates the album of the record.
+        """
         # check if the request is an AJAX request
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             response = JsonResponse({'success': True})
-            # get the album
             album = get_object_or_404(Album, id=self.request.POST['album_id'])
         else:
             try:
                 response = redirect(request.META.get('HTTP_REFERER'))
             except TypeError:
                 response = redirect(reverse('arch_app:record', kwargs={'pk': self.request.POST['record_id']}))
-            # get the album
             album = get_object_or_404(Album, id=self.request.POST['album'])
 
         record_id = self.request.POST['record_id']
         record = get_object_or_404(Record, id=record_id)
 
-        # check permissions
-        # if not request.user.has_perm('change_record', record) or not request.user.has_perm('change_album', album):
         if not request.user.has_perm('is_moderator', album.archive) or \
                 not request.user.has_perm('is_moderator', record.album.archive):
             messages.error(request, _('You do not have the permission to add this record to this Album.'))
             return response
 
-        # check if the record is already in the album
         if record.album.id == album.id:
             messages.error(request, _('This record is already in this album.'))
             return response
 
-        # remove permissions from the old album group
+        # remove permissions from the old album group, update the album of the record and save
         remove_perm('view_record', record.album.group, record)
-        # update the album of the record and save
         record.album = album
         record.save()
         # add permissions to the album group
         assign_perm('view_record', album.group, record)
 
-        # update nav_ctx
+        # update nav_ctx (remove record from nav_ctx)
         if 'nav_ctx' in self.request.session:
             nav_ctx = self.request.session.get('nav_ctx', [])
             if record_id in nav_ctx:
-                # remove record from nav_ctx
                 nav_ctx.remove(record_id)
-
-                # store the modified nav_ctx in the session
                 self.request.session['nav_ctx'] = nav_ctx
         return response
 
@@ -614,36 +589,37 @@ class RecordView(LoginRequiredMixin, generic.TemplateView):
         context['archive'] = current_record.album.archive
         context['album'] = current_record.album
         context['record'] = current_record
-        # context['album_mode'] = self.request.session['album_mode']
         context['album_mode'] = self.request.GET.get('album_mode')
 
         return context
 
     def get(self, request, *args, **kwargs):
+        """
+        Get method for the record view.
+        Checks if the user has permission to view the record and tracks the access to the record.
+        """
         record = Record.objects.get(id=self.kwargs['pk'])
-        # check permissions using django-guardian
         if not request.user.has_perm('view_record', record):
             messages.error(request, _('You do not have permission to view this record.'))
-            # redirect to search page if user does not have permission to view record
             return HttpResponseRedirect(reverse('arch_app:search'))
         # track access to record
         Tracker.objects.create_from_request(request=request, content_object=record, user=request.user)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-
+        """
+        Post method for the record view.
+        Handles updating the record details and adding new comments.
+        """
         record = Record.objects.get(id=self.kwargs['pk'])
 
         if request.POST['action'] == 'comment':
-            # check permissions using django-guardian
             if not request.user.has_perm('view_record', record):
                 messages.error(request, _('You do not have permission to comment on this record.'))
                 return HttpResponseRedirect(reverse('arch_app:record', kwargs=self.kwargs))
-            # handle comment post
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
-                # comment.text = comment.text
                 comment.user = request.user
                 comment.record = record
                 if settings.HIDE_COMMENTS:
@@ -653,16 +629,12 @@ class RecordView(LoginRequiredMixin, generic.TemplateView):
                 messages.error(request, _('Comment could not be posted.'))
 
         elif request.POST['action'] == 'save':
-            # check permissions using django-guardian
-            # only moderators and the creator of the record can edit the record
             if not request.user.has_perm('is_moderator', record.album.archive) and \
                     not request.user.has_perm('change_record', record):
                 messages.error(request, _('You do not have permission to edit this record.'))
                 return HttpResponseRedirect(reverse('arch_app:record', kwargs=self.kwargs))
-            # handle updating the record
             record_form = RecordForm(request.POST, request.FILES, instance=record)
             location_form = LocationForm(request.POST, instance=record.location)
-
             if record_form.is_valid() and location_form.is_valid():
                 record = record_form.save(commit=False)
                 record.location = location_form.save()
@@ -671,7 +643,7 @@ class RecordView(LoginRequiredMixin, generic.TemplateView):
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             else:
                 messages.error(request, _('Record could not be saved. Please try again.'))
-                # add (the form )error messages to the messages framework
+                # add (the form) error messages to the messages framework
                 for field, error in record_form.errors.items():
                     for e in error:
                         messages.error(request, e)
@@ -695,9 +667,8 @@ def delete_record(request, pk):
     try:
         record.delete()
     except Exception as e:
-        # log the error
-        console_logger.log(e)
-        file_logger.log(e)
+        console_logger.error(e)
+        file_logger.error(e)
         messages.error(request, _('Record could not be deleted.'))
 
     # update the navigation context when deleting a record
@@ -713,6 +684,8 @@ def delete_record(request, pk):
                 pass
         request.session['nav_ctx'].remove(str(pk))
         request.session.modified = True
+    else:
+        index = None
 
     messages.success(request, _('Record was deleted.'))
 
@@ -741,10 +714,8 @@ def delete_record(request, pk):
 def hide_comment(request, pk):
     """ View for hiding or showing a comment """
     comment = Comment.objects.get(id=pk)
-    # check permissions if user is moderator
     if not request.user.has_perm('is_moderator', comment.record.album.archive):
         messages.error(request, _('You do not have permission to hide this comment.'))
-        # redirect where the user came from
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     # toggle the visible attribute of the comment
     if comment.visible == "visible":
@@ -753,7 +724,6 @@ def hide_comment(request, pk):
         comment.visible = "visible"
     else:
         messages.error(request, _('Cannot change visibility.'))
-        # redirect where the user came from
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     comment.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -763,14 +733,16 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
     """
     Handles the search request and displays the current navigation context
     """
-
     model = Record
     template_name = 'arch_app/search.html'
     paginate_by = PAGINATE_BY
     cache_form = False
 
     def get(self, request, *args, **kwargs):
+        """
+        Get method for the search view.
 
+        """
         if 'nav_ctx' in self.request.session:
             if self.request.session['nav_ctx']:
                 nav_ctx = self.request.session['nav_ctx']
@@ -781,20 +753,16 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
                                                            Record.objects.filter(pk__in=nav_ctx)) \
                     .order_by(preserved)
                 self.request.session['nav_ctx'] = [str(i.id) for i in self.search_results]
-
-                # get paginator
                 paginator = self.get_paginator(self.get_queryset(), self.paginate_by)
                 # check if the page is out of range. If so, redirect to the last page
                 if paginator.num_pages < int(self.request.GET.get('page', 1)):
                     # redirect to the last page
                     return redirect(reverse('arch_app:search', kwargs={}) + '?page=' + str(
                         paginator.num_pages))
-
                 return super().get(request, *args, **kwargs)
 
         # empty nv_ctx
         self.search_results = Record.objects.none()
-
         if 'page' in self.request.GET:
             self.object_list = self.get_queryset()
             page = self.request.GET['page']
@@ -812,22 +780,22 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """
+        Post method for the search view.
+        Handles the search request and redirects to the search page with the query parameters.
+        """
         self.search_results = []
-        # handle comment post
         search_form = SearchForm(request.POST)
 
         if search_form.is_valid():
-
-            # parameters from the form cleaned_data
+            # generate navigation context given the query parameters provided by the form
             cleaned_data = search_form.cleaned_data
             self.search_results = None
-            # generate navigation context given the query parameters provided by the form
             search_results_ids, self.search_results = self.get_search_results(cleaned_data)
             nav_ctx = search_results_ids
             self.request.session['nav_ctx'] = nav_ctx
 
             query_params = {
-
                 'query': cleaned_data['search_query'],
                 'start_date': cleaned_data['start_date'],
                 'end_date': cleaned_data['end_date'],
@@ -835,20 +803,16 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
                 'media_type': cleaned_data['media_type'],
                 'depicted_users': cleaned_data['depicted_users'],
                 'cache_form': True
-                # Add more query parameters as needed
             }
-            # Redirect to URL with query parameters
+            # Redirect to GET search view with query parameters
             url = reverse('arch_app:search') + '?' + urlencode(query_params)
             return redirect(url)
 
-
-
         else:
-            # add (the form )error messages to the messages framework
+            # add (the form) error messages to the messages framework
             for field, error in search_form.errors.items():
                 for e in error:
                     messages.error(request, e)
-
             return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -878,10 +842,8 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
         context['album_mode'] = "False"
         context['media_type'] = None
-        # self.request.session['album_mode'] = "False"
-
+        # if the form is to be cached, populate the form with the query parameters
         if self.request.GET.get('cache_form'):
-            # if the form is to be cached, populate the form with the query parameters
             context['populated_form'] = True
             context['query'] = self.request.GET.get('query', None)
             context['start_date'] = self.request.GET.get('start_date', None)
@@ -890,7 +852,6 @@ class SearchView(LoginRequiredMixin, SearchMixin, generic.ListView):
             context['media_type'] = self.request.GET.get('media_type', None)
             context['depicted_users'] = self.request.GET.get('depicted_users', None)
             context['search_form'] = self.populate_search_form(context)
-
         return context
 
 
@@ -920,13 +881,16 @@ class AlbumView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get(self, request, *args, **kwargs):
-        # get album
+        """
+        Get method for the album view.
+        Checks if the user has permission to view the album and tracks the access to the album.
+        """
         try:
             album = Album.objects.get(id=self.kwargs['pk'])
         except Album.DoesNotExist:
             messages.error(request, _('The album you requested does not exist.'))
             return redirect('arch_app:index')
-        # check permissions
+
         if not request.user.has_perm('view_album', album) and not request.user.has_perm('is_moderator', album.archive):
             messages.error(request, _('You do not have permission to view this album.'))
             # try redirect to where the user came from, but check it is not the page of the album again
@@ -936,7 +900,6 @@ class AlbumView(LoginRequiredMixin, generic.ListView):
             else:
                 return redirect(request.META.get('HTTP_REFERER', '/'))
 
-        # get paginator
         paginator = self.get_paginator(self.get_queryset(), self.paginate_by)
         # check if the page is out of range
         if paginator.num_pages < int(self.request.GET.get('page', 1)):
@@ -958,17 +921,14 @@ class AlbumCreateView(LoginRequiredMixin, generic.TemplateView):
     def post(self, request, *args, **kwargs):
         """
         handles post request to create a new album
+        checks if the user has the permission to create a new album
         """
         if request.POST['action'] == 'create':
-            # check permissions
             if not request.user.has_perm('is_moderator', Archive.objects.get(id=request.POST['archive'])):
                 messages.error(request, _('Sorry, you do not have permission to create a new album.'))
-                # redirect to landing page
                 return redirect(reverse("arch_app:index"))
 
-            # creates a new empty album
             album_form = CreateAlbumForm(request.POST)
-
             if album_form.is_valid():
                 album = album_form.save(commit=False)
                 album.creator = request.user
@@ -980,13 +940,8 @@ class AlbumCreateView(LoginRequiredMixin, generic.TemplateView):
                     return redirect(reverse('arch_app:album_list', kwargs={
                         'archive_pk': request.POST['archive']
                     }))
-                    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                # assign permissions
+                # assign permissions to the residential group moderators
                 # (view permissions are already automatically assigned to all residential group members in models.py)
-                # # assign permissions to the user who created the album
-                # assign_perm('delete_album', request.user, album)
-                # assign_perm('change_album', request.user, album)
-                # assign permissions to the residential group staff members
                 assign_perm('delete_album', album.archive.moderators, album)
                 assign_perm('change_album', album.archive.moderators, album)
                 messages.success(request, _('New Album created!'))
@@ -994,7 +949,6 @@ class AlbumCreateView(LoginRequiredMixin, generic.TemplateView):
             else:
                 messages.warning(request, _("Could not create a new Album."))
 
-        # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         return redirect(reverse('arch_app:album_list', kwargs={
             'archive_pk': request.POST['archive']
         }))
@@ -1007,22 +961,21 @@ class AlbumUpdateView(LoginRequiredMixin, SuccessMessageMixin, View):
     """
 
     def post(self, request, *args, **kwargs):
-        # check permissions if user can change album
+        """
+        handles post request to update an album
+        checks if the user has the permission to change the album
+        """
         if not request.user.has_perm('is_moderator', Album.objects.get(id=self.kwargs['pk']).archive):
-            # if user does not have the permission, show message and redirect to where the user came from
             messages.error(request, _('You do not have permission to change this album.'))
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
-        # creates a new empty album
         if self.request.GET.get('type_of_form') and \
                 self.request.GET.get('type_of_form') == 'update_album_members_form':
             form = UpdateAlbumMembersForm(request.POST, instance=Album.objects.get(id=self.kwargs['pk']))
         else:
             form = UpdateAlbumForm(request.POST, instance=Album.objects.get(id=self.kwargs['pk']))
-
         if form.is_valid():
             form.save()
-
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -1086,8 +1039,8 @@ def generate_autocomplete_json(query_results, max_length=70):
     max_length: int. Truncates the results to the given length
     """
     query_results_json = []
-    for result in query_results:
-        for r in result:
+    for q_result in query_results:
+        for r in q_result:
             if r:
                 query_results_json.append(r[:max_length] + ('...' if len(r) > max_length else ''))
     return query_results_json
@@ -1099,7 +1052,6 @@ def autocomplete(request):
     The function handles different autocomplete types ('search_location', 'search_depicted_users', 'search_input').
     Results are consumed by the autocomplete (jquery) function of the search bar.
     """
-
     if request.GET.get('autocomplete') == 'search_location':
         if 'term' in request.GET:
             q_list = [
@@ -1107,17 +1059,13 @@ def autocomplete(request):
                 Q(location__country__icontains=request.GET['term']),
                 Q(location__state__icontains=request.GET['term']),
                 Q(location__region__icontains=request.GET['term']),
-
             ]
-
             # filter record by permissions
             filtered_records = get_objects_for_user(
                 request.user,
                 'view_record',
                 Record.objects.select_related('location').filter(Q(*q_list, _connector=Q.OR))
             )
-            # filtered_locations = Location.objects.filter(Q(*q_list, _connector=Q.OR))
-
             query_results = filtered_records.values_list('location__name',
                                                          'location__country',
                                                          'location__state',
@@ -1132,12 +1080,9 @@ def autocomplete(request):
                 Q(depicted_users__user__first_name__icontains=request.GET['term']),
                 Q(depicted_users__user__last_name__icontains=request.GET['term']),
             ]
-
             # get residential groups of the user
-            user = request.user
-            archives = user.archives.all()
+            archives = User.objects.get(id=request.user.id).archives.all()
             active_members = [archive.get_active_members() for archive in archives]
-
             # merge query sets
             query_merged = chain.from_iterable(active_members)
 
@@ -1160,8 +1105,8 @@ def autocomplete(request):
                                                          'depicted_users__user__last_name').distinct()
 
             query_results_json = []
-            for result in query_results:
-                for r in result:
+            for q_result in query_results:
+                for r in q_result:
                     if r:
                         if r in users_data:
                             query_results_json.append(r)
@@ -1193,8 +1138,9 @@ class TagCreateView(LoginRequiredMixin, generic.View):
     form_class = CreateTagForm
 
     def post(self, request, *args, **kwargs):
-
-        # check permissions
+        """
+        Handles the post request to tag a user in a record object
+        """
         try:
             tag = Tag(record=Record.objects.get(id=self.kwargs['pk']))
             form = self.form_class(request.POST, instance=tag)
@@ -1204,7 +1150,6 @@ class TagCreateView(LoginRequiredMixin, generic.View):
             else:
                 messages.warning(request, _("Could not tag person."))
         except Exception as e:
-            # log error
             file_logger.error(e)
             console_logger.error(e)
             messages.warning(request, _("Error"))
@@ -1213,13 +1158,16 @@ class TagCreateView(LoginRequiredMixin, generic.View):
 
 class UpdateTagView(LoginRequiredMixin, generic.UpdateView):
     """
-    View to tag a user in a record object
+    View to update a tag and change/add the user to the tag
     """
     model = Tag
     form_class = UpdateTagForm
 
     def post(self, request, *args, **kwargs):
-        # check permissions
+        """
+        Handles the post request to update a tag and change/add the user to the tag
+        checks if the user is a moderator and has the permission to tag a person
+        """
         if not request.user.has_perm('is_moderator', self.get_object().record.album.archive):
             messages.error(request, _('You do not have permission to tag this person.'))
             return redirect(request.META.get('HTTP_REFERER', '/'))
@@ -1231,7 +1179,6 @@ class UpdateTagView(LoginRequiredMixin, generic.UpdateView):
             else:
                 messages.warning(request, _("Could not tag person."))
         except Exception as e:
-            # log error
             file_logger.error(e)
             console_logger.error(e)
             messages.warning(request, _("Error."))
@@ -1394,6 +1341,7 @@ class AlbumListView(LoginRequiredMixin, generic.ListView):
 
 @login_required
 def feedback_view(request):
+    """ View to send feedback to the administrator. """
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
         if form.is_valid():
@@ -1404,7 +1352,9 @@ def feedback_view(request):
             }
             email_status = send_email(settings.CONTACT_EMAIL,
                                       subject="User's feedback!",
-                                      html_message=render_to_string('arch_app/emails/feedback_email.html', context))
+                                      html_message=render_to_string('arch_app/emails/feedback_email.html',
+                                                                    context)
+                                      )
 
             if email_status:
                 messages.success(request, _('Feedback was sent successfully.'))
@@ -1424,9 +1374,7 @@ def hide_personal_data(request):
     """
     hides personal data from the archive, logs out user and sends confirmation email
     """
-    # get user
     user = request.user
-    # set user to hidden
     user.visible = False
     user.save()
     # hide all comments
@@ -1529,13 +1477,15 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
     """ Dashboard for the admin to track usage statistics. """
     template_name = "arch_app/dashboard.html"
 
-    def get_timeseries(self, model, field, window='month', filters={}):
+    def get_timeseries(self, model, field, window='month', filters=None):
         """
         Returns a timeseries of the given model and field.
         param: model: the model to query
         param: field: the field to query
         param: window: the window to group by (e.g., month, week, day)
+        param: filters: additional filters to apply
         """
+        filters = filters or {}
         dates = (model.objects.filter(**{f'{field}__isnull': False}, **filters)
                  .annotate(date_x=Trunc(field, kind=window))
                  .values('date_x')
@@ -1567,7 +1517,7 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         timeseries_logins = self.get_timeseries(Tracker, 'timestamp', 'week',
                                                 {'content_type__model': 'user'})
         timeseries_record_views = self.get_timeseries(Tracker, 'timestamp', 'week',
-                                                      {'content_type__model': 'record'})
+                                                {'content_type__model': 'record'})
         timeseries_albums = self.get_timeseries(Tracker, 'timestamp', 'week',
                                                 {'content_type__model': 'album'})
 
@@ -1626,15 +1576,16 @@ class DashboardView(LoginRequiredMixin, generic.TemplateView):
         """
         Checks if the user is an admin. If not, redirects to the home page.
         """
-        # check permissions
         if not request.user.has_perm('is_admin'):
             messages.error(request, _('You do not have permission to view this page.'))
-            # redirect to home
             return HttpResponseRedirect(reverse('arch_app:index'))
         return super().get(request, *args, **kwargs)
 
 
 class MembershipDateFormView(generic.UpdateView):
+    """
+    View to change the membership (dates) of a user in an archive
+    """
     model = Membership
     form_class = MembershipDateForm
 
@@ -1643,7 +1594,6 @@ class MembershipDateFormView(generic.UpdateView):
         self.object = form.save()
         return redirect(reverse('arch_app:members', kwargs={'archive_name': self.object.archive.name,
                                                             'pk': self.object.archive.pk}))
-        # return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
 
     def form_invalid(self, form):
         for field, error in form.errors.items():

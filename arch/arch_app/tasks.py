@@ -8,6 +8,7 @@ if settings.ACTIVATE_AI_SEARCH:
     from .modules.embeddings.text_image_embedding import generate_image_embedding
 if settings.ACTIVATE_FACE_DETECTION:
     from .modules.computer_vision.face_detection import detect_faces
+from .modules.file_conversion.file_conversion import generate_preview
 
 import logging
 console_logger = logging.getLogger('ARCH_console_logger')
@@ -49,44 +50,12 @@ def generate_preview_and_save(record_id, file_extension, mime_type, subtype):
         console_logger.error(f"Error when trying to generate preview. Record with id {record_id} does not exist.")
         file_logger.error(f"Error when trying to generate preview. Record with id {record_id} does not exist.")
         return False
-
-    to_convert = ["quicktime", "mov", "mpeg", "avi", "wmv", "x-msvideo", "x-ms-asf", "x-ms-wmv"]
-    if record.type == 'Video' and file_extension in to_convert or subtype in to_convert:
-        try:
-            source = record.media_file.path
-            target = os.path.splitext(source)[0] + ".mp4"
-            os.system(f"ffmpeg -i {source} -qscale 0 {target}")
-            with open(target, 'rb') as target_file:
-                record = Record.objects.get(id=record_id)  # reload record to avoid concurrency issues
-                record.preview_file.save("preview.mp4", target_file, save=True)
-            os.remove(target)
-        except Exception as e:
-            console_logger.error(f"Error while converting video file: {e}")
-            file_logger.error(f"Error while converting video file: {e}")
-            pass
-    if record.type == 'Audio' and file_extension in ['wma', 'aac']:
-        try:
-            source = record.media_file.path
-            target = os.path.splitext(source)[0] + ".mp3"
-            os.system(f"ffmpeg -i {source} -qscale 0 {target}")
-            with open(target, 'rb') as target_file:
-                record = Record.objects.get(id=record_id)  # reload record to avoid concurrency issues
-                record.preview_file.save("preview.mp3", target_file, save=True)
-            os.remove(target)
-        except Exception as e:
-            console_logger.error(f"Error while converting audio file: {e}")
-            file_logger.error(f"Error while converting audio file: {e}")
-            pass
-    if record.type == 'Image':
-        try:
-            with open(record.media_file.path, 'rb') as media_file:
-                record = Record.objects.get(id=record_id)  # reload record to avoid concurrency issues
-                record.preview_file.save(f"preview.{file_extension}", media_file, save=True)
-        except Exception as e:
-            console_logger.error(f"Error while saving image preview: {e}")
-            file_logger.error(f"Error while saving image preview: {e}")
-            pass
-    return True
+    preview_path = generate_preview(record, file_extension, subtype)
+    if preview_path:
+        record.preview_file.name = os.path.relpath(preview_path, settings.MEDIA_ROOT)
+        record.save(update_fields=['preview_file'])
+        return True
+    return False
 
 
 def generate_image_embedding_and_save(record_id):
@@ -105,5 +74,5 @@ def generate_image_embedding_and_save(record_id):
         return False
     record = Record.objects.get(id=record_id)  # reload record to avoid concurrency issues
     record.embedding = img_emb.tolist()
-    record.save()
+    record.save(update_fields=['embedding'])
     return True
