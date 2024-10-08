@@ -1,16 +1,27 @@
 ## Populate the DB 
 
-- To populate the DB with a superuser, sample users and residential groups.
+To populate the DB with a superuser, sample users and residential groups.
+
+```
+python manage.py populate_db --settings=arch.settings
+```
+
+## Create archive backup as a zipped file
+
+- To create a zipped archive of all media files in archive group with id 1.
 
   ```
-  python manage.py populate_db
+  python manage.py zip_archive 1 --settings=arch.settings
   ```
 
-- To populate the DB with sample media files and albums.
+- To create a zipped archive for all archive groups.
 
   ```
-  python manage.py read_media
+  python manage.py zip_album --all --settings=arch.settings
   ```
+  
+- the zipped archive will be saved in the `media` directory. It can be donwloaded via the link [/media/archive_[archive.id]/archive_[archive.name].zip]()
+
 
 ## Create Translations
 
