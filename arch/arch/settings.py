@@ -28,13 +28,13 @@ DEBUG = eval(os.environ.get("DEBUG", default="True")) == True
 # Contact email for the website
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', default='admin@example.com')
 # AI Search: Enables searching for images (requires torch==2.0.0 and sentence-transformers==2.2.2)
-ACTIVATE_AI_SEARCH = bool(os.environ.get("ACTIVATE_AI_SEARCH", default=1))
+ACTIVATE_AI_SEARCH = eval(os.environ.get("ACTIVATE_AI_SEARCH", default=0))
 # Quantize the AI models used by the search module to reduce memory usage
-QUANTIZE_CLIP_MODELS = bool(os.environ.get("QUANTIZE_CLIP_MODELS", default=1))
+QUANTIZE_CLIP_MODELS = eval(os.environ.get("QUANTIZE_CLIP_MODELS", default=1))
 # Face Detection: Automatically detects faces on uploaded images (requires Tensorflow and cvlib==0.2.7)
-ACTIVATE_FACE_DETECTION = bool(os.environ.get("ACTIVATE_FACE_DETECTION", default=1))
+ACTIVATE_FACE_DETECTION = eval(os.environ.get("ACTIVATE_FACE_DETECTION", default=0))
 # Moderation settings: Hides new comments as default until they are approved by a moderator
-HIDE_COMMENTS = bool(os.environ.get("HIDE_COMMENTS", default=1))
+HIDE_COMMENTS = eval(os.environ.get("HIDE_COMMENTS", default=1))
 # Maximum file size for uploads in bytes (i.e. 2.5 MB * 100)
 MAX_FILE_SIZE = 2621440 * 100
 
