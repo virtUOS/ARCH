@@ -12,45 +12,47 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-from distutils.util import strtobool
 from pathlib import Path
 import django
 from django.utils.translation import gettext_lazy as _
-from transformers.hf_argparser import string_to_bool
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@y5fcxi+h*vakr5366gli%1(i(&@_xd%(3%w-cx)*l2srj+k_-')
-
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '@y5fcxi+h*vakr5366gli%1(i(&@_xd%(3%w-cx)*l2srj+k_-')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = eval(os.environ.get("DEBUG", default=0)) == True
+DEBUG = eval(os.environ.get("DEBUG", default="True")) == True
 
-# AI configuration
-# requires torch==2.0.0 and sentence-transformers==2.2.2
+### ARCH App Configuration ###
+# Contact email for the website
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', default='admin@example.com')
+# AI Search: Enables searching for images (requires torch==2.0.0 and sentence-transformers==2.2.2)
 ACTIVATE_AI_SEARCH = bool(os.environ.get("ACTIVATE_AI_SEARCH", default=1))
-# quantize the model used by the search module
+# Quantize the AI models used by the search module to reduce memory usage
 QUANTIZE_CLIP_MODELS = bool(os.environ.get("QUANTIZE_CLIP_MODELS", default=1))
-# requires Tensorflow and cvlib==0.2.7
+# Face Detection: Automatically detects faces on uploaded images (requires Tensorflow and cvlib==0.2.7)
 ACTIVATE_FACE_DETECTION = bool(os.environ.get("ACTIVATE_FACE_DETECTION", default=1))
+# Moderation settings: Hides new comments as default until they are approved by a moderator
+HIDE_COMMENTS = bool(os.environ.get("HIDE_COMMENTS", default=1))
+# Maximum file size for uploads in bytes (i.e. 2.5 MB * 100)
+MAX_FILE_SIZE = 2621440 * 100
 
-# Moderation settings
-HIDE_COMMENTS = False           # hides new comments as default until they are approved by a moderator
-
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split()  # ['example.de']
-CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", default="").split()  # ['https://example.de']
+# General Django settings
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="").split()
+CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", default="").split()  # ['http://localhost:1337']
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
+# settings for graph_models (for developers)
+# GRAPH_MODELS = {
+#     'all_applications': False,
+#     'group_models': True,
+#     'app_labels': ["arch_app"],
+# }
 
 INSTALLED_APPS = [
-    # 'django_extensions',              # needed in order to use graph_models
-
-    # default apps:
+    # 'django_extensions',              # needed in order to use graph_models (for developers)
     'django.contrib.admin',
     'django.contrib.auth',              # Core authentication framework and its default models.
     'django.contrib.contenttypes',      # Django content type system (allows permissions to be associated with models).
@@ -59,24 +61,23 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # custom apps:
-    'mathfilters',
+    'mathfilters',                      # math filters for Django templates
     'guardian',                         # Django object-level permissions
     'django_q',                         # Django Q Cluster
-    'arch_app.apps.ArchAppConfig',      # main app
-    # 'languages',                      # not used currently
-    # 'debug_toolbar',                  # debug toolbar
-    'bootstrap5',
-    "crispy_forms",
-    "crispy_bootstrap5",
+    'arch_app.apps.ArchAppConfig',      # main ARCH app
+    'bootstrap5',                       # bootstrap5 django template integration
+    "crispy_forms",                     # crispy forms
+    "crispy_bootstrap5",                # crispy forms for bootstrap5
+    # 'debug_toolbar',                  # debug toolbar (for developers)
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # Manages sessions across requests
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Associates users with requests using sessions.
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -105,32 +106,36 @@ TEMPLATES = [
 WSGI_APPLICATION = 'arch.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',  # default backend
-    'guardian.backends.ObjectPermissionBackend',  # Django Guardian backend
+    'django.contrib.auth.backends.ModelBackend',  # this is default
+    'guardian.backends.ObjectPermissionBackend',  # Django object-level permissions (Django Guardian)
 )
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+# Database settings (PostgreSQL required)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("SQL_DATABASE", "arch_db"),
-        'USER': os.environ.get("SQL_USER", "db_admin"),
-        'PASSWORD': os.environ.get("SQL_PASSWORD", "password"),
-        'HOST': os.environ.get("SQL_HOST", "localhost"),            # set to 'localhost' (default) or 'db' for docker
-        'PORT': os.environ.get("SQL_PORT", "5432"),                 # set to empty string for default (5432)
-        'TEST': {
-            'NAME': 'arch_db_test',
-        },
-    }
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                # name of the db, replace with your database name
+                'NAME': os.environ.get("SQL_DATABASE", default="arch_db"),
+                # username to connect to the database
+                'USER': os.environ.get("SQL_USER", default="db_admin"),
+                # password to connect to the database
+                'PASSWORD': os.environ.get("SQL_PASSWORD", default="change_me"),
+                # set to empty string for localhost (default) or 'db' for docker
+                'HOST': os.environ.get("SQL_HOST", default='localhost'),
+                # set to empty string for default (5432)
+                'PORT': os.environ.get("SQL_PORT", default="5432"),
+                'TEST': {
+                    'NAME': 'arch_db_test',
+                },
+            }
 }
 
 # Django Q settings (using Django’s database backend as a message broker)
 # Documentation: https://django-q2.readthedocs.io/en/master/configure.html
 Q_CLUSTER = {
     'sync': False,      # set to True to run synchronous, good for debugging, default is False
-    'name': 'ARCH',
-    'workers': 2,
+    'name': 'ARCH',     # name of the cluster
+    'workers': 4,       # number of worker processes, adapt to your needs
     'recycle': 500,     # number of tasks a worker can process before recycling, default 500
     'timeout': 30,      # seconds a worker is allowed to spend on a task, default is None (unlimited)
     'max_attempts': 5,  # maximum number of attempts a task will be tried before it fails, default 0 (no limit)
@@ -142,38 +147,29 @@ Q_CLUSTER = {
     'orm': 'default'    # name of the database connection to use for ORM models, default 'default'
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
-AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    # },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-gb'  # e.g. 'en-gb' or 'de'
-TIME_ZONE = 'Europe/Berlin'
+LANGUAGE_CODE = 'en-gb'         # default language (e.g. change to 'de' for German)
+TIME_ZONE = 'Europe/Berlin'     # default time zone, change to your time zone
 USE_I18N = True
-# USE_L10N = True
 USE_TZ = True
+
+# path to the translations
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'), )
+
+LANGUAGES = [
+    ('de', _('German')),
+    ('en-gb', _('English')),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
-# STATICFILES_DIRS = []
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+# Media url and directory (where the uploaded media files will be stored)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -183,55 +179,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'arch_app.User'
 
 LOGIN_REDIRECT_URL = "/"
-# LOGOUT_REDIRECT_URL = "/"
 
-# directory where the archive will be created
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-# path to the translations
-LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'), )
-
-# settings for graph_models
-GRAPH_MODELS = {
-    'all_applications': False,
-    'group_models': True,
-    'app_labels': ["arch_app"],
-}
-
-MAX_FILE_SIZE = 2621440 * 100  # i.e. 2.5 MB * 100
-
-LANGUAGES = [
-    ('de', _('German')),
-    ('en-gb', _('English')),
-]
-
-CONTACT_EMAIL = 'admin@example.com'
-
-# ToDo integrate email support ( https://docs.djangoproject.com/en/4.0/topics/email/ )
-# logs any emails sent to the console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'no-reply@virtuos.uni-osnabrueck.de'
-#EMAIL_USE_TLS = True
-#EMAIL_HOST = 'relay.uni-osnabrueck.de' --> server
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'    # development only to print emails to the console
+DEFAULT_FROM_EMAIL = 'no-reply@arch.de'                             # default sender email
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = 'youremail@gmail.com'
 # EMAIL_HOST_PASSWORD = 'yourpassword'
-#EMAIL_PORT = 25 --> server
+# EMAIL_PORT = 25  # port for the mail server
 
+# Used by debug toolbar (for developers)
+# INTERNAL_IPS = [
+#     "127.0.0.1",
+# ]
 
-# Used by debug toolbar
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
-# Logger
+# Logger settings
 LOG_FILE_PATH = os.path.join(BASE_DIR, 'logs', 'logs.log')
-
 LOG_FOLDER_PATH = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOG_FOLDER_PATH):
     os.makedirs(LOG_FOLDER_PATH)
-
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
