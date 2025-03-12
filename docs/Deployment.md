@@ -53,44 +53,44 @@ or
 #### 7. Clone the repository
 
 ```
-sudo git clone [url of repository e.g. https://github.com/example/ARCH]
+git clone [url of repository e.g. https://github.com/example/ARCH]
 ```
 
 #### 8. Install requirements
 
 **Note**: _Make sure the virtual environment is activated._
 ```
-sudo pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 **Note**: _For python-magic, install the libmagic C library, if not yet installed. (See [https://pypi.org/project/python-magic/](https://pypi.org/project/python-magic/) for the documentation)_
 ```
-sudo apt-get install libmagic1
+apt-get install libmagic1
 ```
 
 #### 9. Install FFmpeg
 
 **Note**: _Install FFmpeg to enable formatting of video and audio._
 ```
-sudo apt-get install ffmpeg
+apt-get install ffmpeg
 ```
 
 #### 10. Install Node.js and NPM
 
 ```
-sudo apt-get install nodejs npm
+apt-get install nodejs npm
 ```
 
 #### 11. Install Webpack
 
 ```
-sudo npm install --save-dev webpack webpack-cli
+npm install --save-dev webpack webpack-cli
 ```
 
 # Create build and bundle static assets
 
 ```
-sudo npm run build
-sudo python manage.py collectstatic
+npm run build
+python manage.py collectstatic
 ```
 
 # Activate optional Features:
