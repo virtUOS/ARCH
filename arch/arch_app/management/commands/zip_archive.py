@@ -44,7 +44,7 @@ class Command(BaseCommand):
                     for record in records:
                         zipf.write(
                             record.media_file.path,
-                            os.path.join(album.title, record.title)
+                            os.path.join(album.title, record.title + "." + record.get_file_extension)
                         )
                     # create json file in the zip album folder with the metadata
                     metadata = {
